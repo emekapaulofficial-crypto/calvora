@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en-NG">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Verify a Calvora ID | Calvora Property Solutions</title>
+<meta name="description" content="Check that a Calvora agent or staff ID is genuine and valid.">
+<link rel="canonical" href="https://www.calvora.com.ng/verify.html">
+<meta property="og:title" content="Verify a Calvora ID | Calvora Property Solutions">
+<meta property="og:description" content="Check that a Calvora agent or staff ID is genuine and valid.">
+<meta property="og:image" content="https://www.calvora.com.ng/img/og.png">
+<meta name="theme-color" content="#012547">
+<link rel="icon" href="img/favicon.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/calvora.css">
+</head>
+<body>
+<div id="hd"></div>
+<main id="main">
+<section class="page-top"><div class="wrap">
+  <p class="crumb"><a href="index.html">Home</a> / Verify a Calvora ID</p>
+  <h1>Verify a Calvora ID</h1>
+  <p>Check that an agent or staff member really works with Calvora.</p>
+</div></section>
+<div class="wrap" style="padding:34px 0 0">
+  <form id="vf" class="panel" style="max-width:520px" novalidate>
+    <label for="vid" style="margin-top:0">ID number</label>
+    <input id="vid" name="id" placeholder="e.g. CV-AGT-001" autocomplete="off" autocapitalize="characters" maxlength="30" required>
+    <p class="hint">The ID number is printed on the card, and the QR code opens this page with the number filled in.</p>
+    <button class="btn" type="submit" style="margin-top:10px">Check this ID</button>
+  </form>
+  <div id="vres" aria-live="polite" style="margin-top:22px"></div>
+  <div class="prose" style="margin-top:34px">
+    <h2>What this page shows</h2>
+    <p>Name, photo, ID number, whether the person is an agent or staff, whether the card is valid, and its expiry date. We never show phone numbers, addresses or identity documents here.</p>
+    <p>If a card is lost, expired, suspended or cancelled it shows as <b>not valid</b>. If someone claiming to be from Calvora shows you a card that does not check out here, do not pay them anything and <a href="complaints.html">report it to us</a>.</p>
+  </div>
+</div>
+</main>
+<div id="ft"></div>
+<script src="js/config.js"></script>
+<script src="js/core.js"></script>
+<script>CV.mount("verify");</script>
+<script>
+(function () {
+  var esc = CV.esc, box = document.getElementById("vres"), f = document.getElementById("vf"), inp = document.getElementById("vid");
+  async function check(code) {
+    code = (code || "").trim().toUpperCase(); if (!code) return;
+    box.innerHTML = '<div class="loading"><span class="pulse"></span>Checking\u2026</div>';
+    try {
+      var rows = await CV.rpc("verify_id", { p_code: code }), r = rows && rows[0];
+      if (!r) { box.innerHTML = '<div class="vcard"><div class="top no">' + CV.icon("warn") + ' Not valid</div><div class="body"><p style="margin:0"><b>No Calvora ID matches \u201C' + esc(code) + '\u201D.</b><br>Check the number and try again. If you were given this card by someone, do not pay them until it checks out.</p></div></div>'; return; }
+      var ok = r.status === "valid";
+      var why = { expired: "This card has expired.", suspended: "This card is not active.", invalid: "This card is not active." }[r.status];
+      var av = r.photo_url ? '<img class="av" src="' + esc(r.photo_url) + '" alt="Photo of ' + esc(r.full_name) + '">' : '<span class="av av-i" aria-hidden="true">' + esc(CV.initials(r.full_name)) + "</span>";
+      box.innerHTML = '<div class="vcard"><div class="top ' + (ok ? "ok" : "no") + '">' + (ok ? CV.icon("check") + " Valid Calvora ID" : CV.icon("warn") + " Not valid") + "</div>" +
+        '<div class="body">' + av + "<dl><dt>Name</dt><dd>" + esc(r.full_name) + "</dd><dt>ID number</dt><dd>" + esc(r.id_code) + "</dd><dt>Category</dt><dd>" + esc(r.category) + (r.department ? " \u00B7 " + esc(r.department) : "") + "</dd>" +
+        "<dt>Status</dt><dd>" + (ok ? "Registered and active" : "Not valid") + "</dd>" + (r.expires_at ? "<dt>Expires</dt><dd>" + CV.date(r.expires_at) + "</dd>" : "") +
+        (ok && r.badge ? "<dt>Badge</dt><dd>" + CV.badgeChip(r.badge, 20) + "</dd>" : "") + "</dl></div>" +
+        (!ok ? '<div class="body" style="padding-top:0"><p style="margin:0"><b>Problem:</b> ' + why + " Do not pay this person. <a href=\"complaints.html\">Report it</a>.</p></div>" : "") + "</div>";
+    } catch (e) { box.innerHTML = CV.problem("The check could not be done right now. Please try again in a moment."); }
+  }
+  f.addEventListener("submit", function (e) { e.preventDefault(); history.replaceState(null, "", "verify.html?id=" + encodeURIComponent(inp.value.trim())); check(inp.value); });
+  var pre = CV.qs().get("id"); if (pre) { inp.value = pre; check(pre); }
+})();
+</script>
+</body>
+</html>
