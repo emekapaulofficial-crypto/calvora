@@ -180,6 +180,7 @@
       '<div class="grid2"><div><label for="f_type">' + (land ? "Land use" : "Property type") + '</label><select id="f_type">' + PT.opts(land ? CV.LAND_USE : CV.HOUSE_TYPES, p && p.property_type) + "</select></div>" +
       (land ? '<div><label for="f_size">Land size (sqm)</label><input id="f_size" type="number" min="1" step="any" inputmode="decimal" value="' + v("land_size_sqm") + '"></div>' : '<div class="grid2" style="gap:0 12px"><div><label for="f_beds">Bedrooms</label><input id="f_beds" type="number" min="0" max="30" value="' + v("bedrooms") + '"></div><div><label for="f_baths">Bathrooms</label><input id="f_baths" type="number" min="0" max="30" value="' + v("bathrooms") + '"></div></div>') + "</div>" +
       (land ? '<label for="f_title2">Title document</label><select id="f_title2">' + PT.opts(CV.LAND_TITLES, p && p.land_title, "Choose one") + "</select>" : "") +
+      '<label for="f_video">Video link <span class="fine">(optional: a YouTube, Facebook, TikTok, Instagram, Vimeo or Google Drive link)</span></label><input id="f_video" type="url" inputmode="url" maxlength="300" placeholder="https://" value="' + v("video_url") + '">' +
       '<label for="f_desc">Description</label><textarea id="f_desc" maxlength="3000" style="min-height:130px" placeholder="Describe the property honestly: condition, surroundings, anything a customer should know.">' + v("description") + "</textarea>" +
       '<fieldset class="feats"><legend>Features</legend>' + list.map(function (f) { return '<label class="check"><input type="checkbox" name="feat" value="' + esc(f) + '"' + (feats.indexOf(f) >= 0 ? " checked" : "") + "> " + esc(f) + "</label>"; }).join("") + "</fieldset></div>" +
       '<div class="panel"><h3>Price and fees</h3><p class="fine" style="margin-top:0">Be exact. Customers see these figures, and Calvora staff check them with the owner. Never hide a fee.</p>' +
@@ -251,11 +252,13 @@
         var f = F.newProofs[j], path = user.id + "/proof-" + Date.now() + "-" + j + "-" + PT.safeName(f.name);
         var up = await sb.storage.from("owner-docs").upload(path, f); if (up.error) throw up.error; proofs.push(path);
       }
+      var videoUrl = g("#f_video");
+      if (videoUrl && !/^https:\/\/([a-z0-9-]+\.)?(youtube\.com|youtu\.be|facebook\.com|fb\.watch|tiktok\.com|instagram\.com|drive\.google\.com|vimeo\.com)\//i.test(videoUrl)) throw new Error("The video link must start with https:// and come from YouTube, Facebook, TikTok, Instagram, Vimeo or Google Drive.");
       var row = {
         title: g("#f_title"), state: $("#f_state").value, area: g("#f_area"), property_type: g("#f_type"),
         listing_type: rent ? "rent" : "sale", category: land ? "land" : "house", price: price,
         agency_fee: Number(g("#f_agency")) || 0, legal_fee: Number(g("#f_legal")) || 0, caution_fee: rent ? Number(g("#f_caution")) || 0 : 0,
-        description: g("#f_desc"), photo_urls: urls, status: mode,
+        description: g("#f_desc"), photo_urls: urls, video_url: videoUrl || null, status: mode,
         features: $$("input[name=feat]:checked").map(function (c) { return c.value; })
       };
       if (land) { row.land_size_sqm = Number(g("#f_size")) || null; row.land_title = g("#f_title2") || null; row.bedrooms = null; row.bathrooms = null; }
