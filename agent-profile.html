@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en-NG">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Agent profile | Calvora Property Solutions</title>
+<meta name="description" content="Registered Calvora agent profile with badge, listings and verified customer reviews.">
+<link rel="canonical" href="https://www.calvora.com.ng/agent-profile.html">
+<meta property="og:title" content="Agent profile | Calvora Property Solutions">
+<meta property="og:description" content="Registered Calvora agent profile with badge, listings and verified customer reviews.">
+<meta property="og:image" content="https://www.calvora.com.ng/img/og.png">
+<meta name="theme-color" content="#012547">
+<link rel="icon" href="img/favicon.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/calvora.css">
+</head>
+<body>
+<div id="hd"></div>
+<main id="main">
+
+<div class="wrap" style="padding-top:28px"><div id="view"><div class="loading"><span class="pulse"></span>Loading profile&hellip;</div></div></div>
+</main>
+<div id="ft"></div>
+<script src="js/config.js"></script>
+<script src="js/core.js"></script>
+<script>CV.mount("agents");</script>
+<script>
+(function () {
+  var esc = CV.esc, view = document.getElementById("view"), code = (CV.qs().get("code") || "").trim();
+  document.querySelector(".page-top") && 0;
+  function stars(n) { n = Math.round(n); return '<span class="stars" aria-hidden="true">' + "\u2605".repeat(n) + "\u2606".repeat(5 - n) + "</span>"; }
+  async function init() {
+    if (!code) { view.innerHTML = CV.problem("No agent was chosen.") + '<p><a class="btn" href="agents.html">See all agents</a></p>'; return; }
+    try {
+      var a = (await CV.get("public_agents?select=*&agent_code=eq." + encodeURIComponent(code.toUpperCase()) + "&limit=1")).rows[0];
+      if (!a) { view.innerHTML = '<div class="empty"><h3>No active agent with that ID</h3><p>The agent may be suspended, their ID may have expired, or the code may be wrong. You can check any ID on our verify page.</p><a class="btn" href="verify.html?id=' + encodeURIComponent(code) + '">Check this ID</a></div>'; return; }
+      document.title = a.name + " (" + a.agent_code + ") | Calvora Property Solutions";
+      var res = await Promise.allSettled([
+        CV.get("public_properties?select=*&agent_code=eq." + encodeURIComponent(a.agent_code) + "&status=eq.approved&order=published_at.desc.nullslast&limit=12"),
+        CV.get("public_reviews?select=*&agent_code=eq." + encodeURIComponent(a.agent_code) + "&order=created_at.desc&limit=20"),
+        CV.get("public_agent_awards?select=award,period&agent_code=eq." + encodeURIComponent(a.agent_code) + "&order=awarded_at.desc&limit=30")
+      ]);
+      var awards = res[2].status === "fulfilled" ? res[2].value.rows : [];
+      var props = res[0].status === "fulfilled" ? res[0].value.rows : [], revs = res[1].status === "fulfilled" ? res[1].value.rows : [];
+      var av = a.photo_url ? '<img class="av" src="' + esc(a.photo_url) + '" alt="' + esc(a.name) + '">' : '<span class="av av-i" aria-hidden="true">' + esc(CV.initials(a.name)) + "</span>";
+      var b = CV.BADGES[a.badge];
+      var wa = CV.waLink("Hello CALVORA, I would like to speak with agent " + a.name + " (" + a.agent_code + ").");
+      view.innerHTML =
+        '<p class="crumb muted"><a href="index.html" style="color:var(--navy)">Home</a> / <a href="agents.html" style="color:var(--navy)">Agents</a> / ' + esc(a.agent_code) + "</p>" +
+        '<div class="profile-head">' + av + '<div style="flex:1;min-width:240px"><h1 style="margin:0 0 6px;font-size:clamp(1.7rem,4vw,2.5rem)">' + esc(a.name) + "</h1>" +
+        '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span class="chip g">Registered CALVORA Agent</span><span class="chip">' + esc(a.agent_code) + "</span>" + (a.location ? '<span class="chip o">' + CV.icon("pin") + " " + esc(a.location) + "</span>" : "") + "</div>" +
+        (awards.length ? '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px" aria-label="Special achievements">' + awards.map(function (w) { return '<span class="chip g" title="' + esc(w.period || "") + '">\u2605 ' + esc(w.award) + (w.period ? " " + esc(w.period) : "") + "</span>"; }).join("") + "</div>" : "") + '<p class="muted" style="margin:10px 0 0">Member since ' + CV.date(a.joined_at) + '. <a href="verify.html?id=' + encodeURIComponent(a.agent_code) + '">Check this agent\u2019s ID</a></p></div>' +
+        '<div class="bigbadge" style="text-align:center">' + CV.badge(a.badge, 96) + '<div style="font-weight:800;color:var(--navy)">' + esc(a.badge) + '</div><div class="fine" style="max-width:20ch">' + esc(b.meaning) + "</div></div></div>" +
+        '<div class="stats4" style="margin-top:22px"><div class="stat"><b>' + a.approved_listings + "</b><span>Approved listings</span></div><div class=\"stat\"><b>" + a.completed_transactions + "</b><span>Completed deals</span></div>" +
+        '<div class="stat"><b>' + (a.review_count ? Number(a.avg_rating).toFixed(1) + " / 5" : "\u2013") + "</b><span>" + (a.review_count ? a.review_count + " verified review" + (a.review_count === 1 ? "" : "s") : "No verified reviews yet") + "</span></div></div>" +
+        '<div class="safe" style="margin-top:0">This badge reflects the agent\u2019s record with Calvora. It does not mean any one property is verified: look for the property\u2019s own label.</div>' +
+        '<section class="sec"><div class="sec-head"><h2>Listings by ' + esc(a.name.split(" ")[0]) + "</h2></div>" +
+        (props.length ? '<div class="cards">' + props.map(CV.card).join("") + "</div>" : '<div class="empty">No live listings right now.</div>') + "</section>" +
+        '<section class="sec"><div class="two"><div><div class="sec-head"><h2>Customer reviews</h2></div>' +
+        (revs.length ? '<ul class="revs">' + revs.map(function (r) { return "<li>" + stars(r.rating) + " <b>" + esc(r.reviewer_first_name) + '</b> <span class="muted small">' + CV.date(r.created_at) + "</span>" + (r.comment ? "<p style=\"margin:6px 0 0\">" + esc(r.comment) + "</p>" : "") + "</li>"; }).join("") + "</ul>" : '<p class="muted">No verified reviews yet.</p>') +
+        "</div>" +
+        '<div class="panel"><h3>Dealt with ' + esc(a.name.split(" ")[0]) + '? Leave a review</h3><p class="fine">Our staff verify every review before it shows or counts. Only your first name is shown publicly. Your phone number is used only to verify the review.</p>' +
+        '<form id="rv" novalidate><label for="rn">Your name</label><input id="rn" name="name" required maxlength="80" autocomplete="name">' +
+        '<label for="rp">Phone number you used with the agent</label><input id="rp" name="phone" type="tel" required inputmode="tel" autocomplete="tel">' +
+        '<fieldset style="border:0;padding:0;margin:14px 0 0"><legend style="font-weight:600;font-size:.9rem">Rating</legend><div class="rate">' +
+        [5, 4, 3, 2, 1].map(function (n) { return '<label><input type="radio" name="rating" value="' + n + '"' + (n === 5 ? " checked" : "") + "> " + n + " \u2605</label>"; }).join("") + "</div></fieldset>" +
+        '<label for="rc">Comment <span class="fine">(optional)</span></label><textarea id="rc" name="comment" maxlength="1000"></textarea>' +
+        '<div class="trap" aria-hidden="true"><label>Website<input name="website" tabindex="-1" autocomplete="off"></label></div>' +
+        '<div id="rvBox" aria-live="polite"></div><button class="btn" type="submit" style="margin-top:14px">Send review</button></form></div></div></section>' +
+        (wa ? '<p><a class="btn line" href="' + wa + '" rel="noopener">' + CV.icon("wa") + " Contact Calvora about this agent</a></p>" : "");
+      CV.submitForm(document.getElementById("rv"), "rvBox", function (fd) {
+        return CV.rpc("submit_review", { p_agent_code: a.agent_code, p_name: fd.get("name"), p_phone: fd.get("phone"), p_rating: Number(fd.get("rating")), p_comment: fd.get("comment") || "" });
+      }, "<b>Thank you.</b> Your review will show once our team has verified it.");
+    } catch (e) { view.innerHTML = CV.problem("This profile could not load right now. Please try again.") + '<p><a class="btn line" href="javascript:location.reload()">Try again</a></p>'; }
+  }
+  init();
+})();
+</script>
+</body>
+</html>
