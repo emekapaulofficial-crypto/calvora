@@ -100,6 +100,7 @@
       '<div class="two-status">' +
         '<div><h4>Property status</h4><div class="v"><span class="chip ' + (lab.cls === "ok" ? "g" : "o") + '">' + esc(lab.text) + '</span></div><div class="s">' + (closed ? "" : esc(verifiedText) + " ") + esc(confirmed) + "</div></div>" +
         '<div><h4>Agent record</h4><div class="v">' + CV.badge(p.agent_badge, 30) + "<span>" + esc(p.agent_badge) + ' agent</span></div><div class="s">Registered agent ' + esc(p.agent_code) + ". A badge shows the agent’s track record, not the property’s checks.</div></div></div>" +
+      (p.video_url ? '<p style="margin-top:18px"><a class="btn green" href="' + esc(p.video_url) + '" target="_blank" rel="noopener noreferrer">&#9654; Watch the property video</a></p>' : "") +
       (p.description ? '<h2 style="font-size:1.3rem;margin-top:22px">About this property</h2><p style="white-space:pre-line">' + esc(p.description) + "</p>" : "") +
       (p.features && p.features.length ? '<h2 style="font-size:1.3rem;margin-top:22px">Features</h2><ul class="feat">' + p.features.map(function (f) { return "<li>" + esc(f) + "</li>"; }).join("") + "</ul>" : "") +
       "</div>" +
