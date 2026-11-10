@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en-NG">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Make a complaint | Calvora Property Solutions</title>
+<meta name="description" content="Report a fake listing, agent behaviour, hidden fees or any other problem. You get a reference number and a written outcome.">
+<link rel="canonical" href="https://www.calvora.com.ng/complaints.html">
+<meta property="og:title" content="Make a complaint | Calvora Property Solutions">
+<meta property="og:description" content="Report a fake listing, agent behaviour, hidden fees or any other problem. You get a reference number and a written outcome.">
+<meta property="og:image" content="https://www.calvora.com.ng/img/og.png">
+<meta name="theme-color" content="#012547">
+<link rel="icon" href="img/favicon.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/calvora.css">
+</head>
+<body>
+<div id="hd"></div>
+<main id="main">
+<section class="page-top"><div class="wrap">
+  <p class="crumb"><a href="index.html">Home</a> / Make a complaint</p>
+  <h1>Make a complaint</h1>
+  <p>Every complaint gets a reference number and is investigated.</p>
+</div></section>
+<div class="wrap">
+ <section class="sec" style="padding-top:34px"><div class="two">
+  <div class="panel"><h2 style="font-size:1.4rem">Tell us what went wrong</h2>
+   <form id="cp" novalidate data-hide-on-ok="1">
+    <label for="cc">What is it about?</label>
+    <select id="cc" name="category" required><option value="">Choose one</option><option>Fake or misleading listing</option><option>Agent behaviour</option><option>Hidden fees or a payment problem</option><option>Property no longer available</option><option>Someone pretending to be from Calvora</option><option>Privacy or my personal information</option><option>Something else</option></select>
+    <label for="cl">Listing code <span class="fine">(optional, e.g. CV-P-00012)</span></label><input id="cl" name="code" maxlength="20" autocapitalize="characters">
+    <label for="cd">What happened?</label><textarea id="cd" name="description" required minlength="10" maxlength="2000" style="min-height:140px"></textarea>
+    <div class="grid2"><div><label for="cn">Your name <span class="fine">(optional)</span></label><input id="cn" name="name" maxlength="100" autocomplete="name"></div>
+    <div><label for="cph">Phone <span class="fine">(so we can reach you)</span></label><input id="cph" name="phone" type="tel" inputmode="tel" autocomplete="tel"></div></div>
+    <div class="trap" aria-hidden="true"><label>Website<input name="website" tabindex="-1" autocomplete="off"></label></div>
+    <div id="cpBox" aria-live="polite"></div>
+    <button class="btn" type="submit" style="margin-top:14px">Submit complaint</button>
+   </form><div id="cpDone" aria-live="polite"></div></div>
+  <div class="prose"><h2 style="margin-top:0">What happens next</h2>
+   <ol class="steps" style="grid-template-columns:1fr"><li><h3>Received</h3><p>You get a reference number straight away. Keep it.</p></li><li><h3>Investigating</h3><p>Our team looks into it and records what we find.</p></li><li><h3>Resolved or dismissed</h3><p>We tell you the outcome. If we cannot act on it, we explain why.</p></li></ol>
+   <p>Quote your reference number whenever you contact us about a complaint. If you think a crime has been committed, please also report it to the police.</p>
+   <p class="fine">Your details are used only to look into your complaint.</p></div>
+ </div></section>
+</div>
+</main>
+<div id="ft"></div>
+<script src="js/config.js"></script>
+<script src="js/core.js"></script>
+<script>CV.mount("complaints");</script>
+<script>
+(function () {
+  var f = document.getElementById("cp");
+  CV.submitForm(f, "cpBox", async function (fd) {
+    if (!fd.get("category")) throw new Error("Please choose what the complaint is about.");
+    var code = (fd.get("code") || "").trim().toUpperCase(), pid = null, desc = fd.get("description");
+    if (code) {
+      desc = "Listing code: " + code + "\n" + desc;
+      try { var r = await CV.get("public_properties?select=id&listing_code=eq." + encodeURIComponent(code) + "&limit=1"); if (r.rows[0]) pid = r.rows[0].id; } catch (e) {}
+    }
+    return CV.rpc("submit_complaint", { p_property: pid, p_name: fd.get("name") || "", p_phone: fd.get("phone") || "", p_category: fd.get("category"), p_description: desc });
+  }, function (ref) { return "<b>Complaint received.</b> Your reference number is <b style=\"font-size:1.15rem\">" + CV.esc(ref) + "</b>. Please keep it, and quote it whenever you contact us."; });
+})();
+</script>
+</body>
+</html>
