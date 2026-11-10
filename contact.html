@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en-NG">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Contact us | Calvora Property Solutions</title>
+<meta name="description" content="Contact Calvora Property Solutions by phone, WhatsApp or message.">
+<link rel="canonical" href="https://www.calvora.com.ng/contact.html">
+<meta property="og:title" content="Contact us | Calvora Property Solutions">
+<meta property="og:description" content="Contact Calvora Property Solutions by phone, WhatsApp or message.">
+<meta property="og:image" content="https://www.calvora.com.ng/img/og.png">
+<meta name="theme-color" content="#012547">
+<link rel="icon" href="img/favicon.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/calvora.css">
+</head>
+<body>
+<div id="hd"></div>
+<main id="main">
+<section class="page-top"><div class="wrap">
+  <p class="crumb"><a href="index.html">Home</a> / Contact us</p>
+  <h1>Contact us</h1>
+  <p>We usually reply fastest on WhatsApp.</p>
+</div></section>
+<div class="wrap">
+ <section class="sec" style="padding-top:34px"><div class="two">
+  <div class="panel ctc"><h2 style="font-size:1.4rem">Reach us</h2>
+   <ul class="ticks" id="cinfo"></ul>
+   <p class="fine">We will always tell you about any fee in writing before you pay. We will never ask you to pay into a personal account.</p>
+  </div>
+  <div class="panel"><h2 style="font-size:1.4rem">Send us a message</h2>
+   <form id="cf" novalidate>
+    <label for="cn">Your name</label><input id="cn" name="name" required maxlength="100" autocomplete="name">
+    <label for="cp">Phone number</label><input id="cp" name="phone" type="tel" required inputmode="tel" autocomplete="tel">
+    <label for="ce">Email <span class="fine">(optional)</span></label><input id="ce" name="email" type="email" maxlength="150" autocomplete="email">
+    <label for="cm">How can we help?</label><textarea id="cm" name="message" required maxlength="1000"></textarea>
+    <div class="trap" aria-hidden="true"><label>Website<input name="website" tabindex="-1" autocomplete="off"></label></div>
+    <div id="cBox" aria-live="polite"></div>
+    <button class="btn" type="submit" style="margin-top:14px">Send message</button>
+   </form></div>
+ </div></section>
+</div>
+</main>
+<div id="ft"></div>
+<script src="js/config.js"></script>
+<script src="js/core.js"></script>
+<script>CV.mount("contact");</script>
+<script>
+(function () {
+  var o = SITE.office || {}, li = [];
+  if (o.phone) li.push('<li>Call <a href="' + CV.telLink() + '">' + CV.esc(o.phone) + "</a></li>");
+  if (o.whatsapp) li.push('<li>WhatsApp <a href="' + CV.waLink("Hello CALVORA") + '" rel="noopener">' + CV.esc(o.phone || "us") + "</a></li>");
+  if (o.email) li.push('<li>Email <a href="mailto:' + CV.esc(o.email) + '">' + CV.esc(o.email) + "</a></li>");
+  if (o.address) li.push("<li>" + CV.esc(o.address) + "</li>");
+  if (o.hours) li.push("<li>" + CV.esc(o.hours) + "</li>");
+  li.push("<li>Currently serving " + CV.esc((SITE.pilot || {}).city || "") + ", " + CV.esc((SITE.pilot || {}).state || "") + "</li>");
+  document.getElementById("cinfo").innerHTML = li.join("");
+  CV.submitForm(document.getElementById("cf"), "cBox", function (fd) {
+    return CV.rpc("submit_enquiry", { p_property: null, p_name: fd.get("name"), p_phone: fd.get("phone"), p_email: fd.get("email") || "", p_message: "[Contact page] " + fd.get("message") });
+  }, "<b>Message sent.</b> A member of the Calvora team will get back to you on the number you gave.");
+})();
+</script>
+</body>
+</html>
