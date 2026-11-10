@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en-NG">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Agent partner portal | Calvora Property Solutions</title>
+<meta name="description" content="Join Calvora as an agent partner, or sign in to your agent dashboard.">
+<link rel="canonical" href="https://www.calvora.com.ng/agent.html">
+<meta property="og:title" content="Agent partner portal | Calvora Property Solutions">
+<meta property="og:description" content="Join Calvora as an agent partner, or sign in to your agent dashboard.">
+<meta property="og:image" content="https://www.calvora.com.ng/img/og.png">
+<meta name="theme-color" content="#012547">
+<link rel="icon" href="img/favicon.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/calvora.css">
+</head>
+<body>
+<div id="hd"></div>
+<main id="main">
+<section class="page-top"><div class="wrap">
+  <p class="crumb"><a href="index.html">Home</a> / Agent partner portal</p>
+  <h1>Agent partner portal</h1>
+  <p>Sign in to your dashboard, or apply to join Calvora as an agent partner.</p>
+</div></section>
+<div class="wrap" style="padding-top:28px"><div id="app"><div class="loading"><span class="pulse"></span>Loading…</div></div><div id="info">
+ <section class="sec"><div class="two">
+  <div class="prose"><h2 style="margin-top:0">Build your property business with a name people trust</h2>
+   <p>Calvora agent partners get a professional listing platform, a personal dashboard, real customer enquiries and clear, traceable commission. You work independently, with our support and standards.</p>
+   <h3>What you get</h3>
+   <ul><li>A public profile with your photo, ID number and badge</li><li>A dashboard for your listings, enquiries, inspections and commission</li><li>A printable ID card with a QR code customers can scan</li><li>A badge that grows with your record: Bronze, Silver, Gold and Diamond</li></ul>
+   <h3>How you join</h3>
+   <ol class="steps" style="grid-template-columns:1fr"><li><h3>Create an account and apply</h3><p>Send your details, your ID document and your agreement to our code of conduct.</p></li><li><h3>We review</h3><p>Our operations team checks your application and may ask for more information.</p></li><li><h3>Get your ID</h3><p>Once approved you receive your agent ID number and your dashboard opens.</p></li><li><h3>List and earn</h3><p>Add properties. Each one is checked by our team before it goes live.</p></li></ol>
+   <h3>What we expect</h3>
+   <p>No fake listings, no hidden fees, no pressure on customers, and no taking money outside official channels. Read the full <a href="safety.html#conduct">code of conduct</a>.</p></div>
+  <div><div class="panel"><h3>Questions first?</h3><p class="muted">Talk to us before you apply.</p><div class="acts-col"><a class="btn green" data-wa="Hello CALVORA, I have a question about becoming an agent partner." href="#" rel="noopener">Ask on WhatsApp</a><a class="btn line" data-tel href="#"></a></div></div></div>
+ </div></section>
+ <section class="sec"><div class="sec-head"><h2>How badges are earned</h2></div><div class="tiers" id="tiers"></div></section>
+</div></div>
+</main>
+<div id="ft"></div>
+<script src="js/config.js"></script>
+<script src="js/core.js"></script>
+<script>CV.mount("");</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="js/portal.js"></script>
+<script src="js/agent-portal.js"></script>
+<script>document.getElementById("tiers").innerHTML = ["Bronze","Silver","Gold","Diamond"].map(function(n){var b=CV.BADGES[n];return '<div class="tier">'+CV.badge(n,72)+"<h3>"+n+'</h3><div class="m">'+CV.esc(b.meaning)+"</div><p>"+CV.esc(b.need)+"</p></div>";}).join("");</script>
+</body>
+</html>
