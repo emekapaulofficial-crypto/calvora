@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en-NG">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>List your property | Calvora Property Solutions</title>
+<meta name="description" content="List your house or land with Calvora. We verify it, handle enquiries and inspections, and keep availability current.">
+<link rel="canonical" href="https://www.calvora.com.ng/list-property.html">
+<meta property="og:title" content="List your property | Calvora Property Solutions">
+<meta property="og:description" content="List your house or land with Calvora. We verify it, handle enquiries and inspections, and keep availability current.">
+<meta property="og:image" content="https://www.calvora.com.ng/img/og.png">
+<meta name="theme-color" content="#012547">
+<link rel="icon" href="img/favicon.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/calvora.css">
+</head>
+<body>
+<div id="hd"></div>
+<main id="main">
+<section class="page-top"><div class="wrap">
+  <p class="crumb"><a href="index.html">Home</a> / List your property</p>
+  <h1>List your property</h1>
+  <p>We check it, advertise it and handle the enquiries.</p>
+</div></section>
+<div class="wrap">
+ <section class="sec" style="padding-top:34px"><div class="two">
+  <div class="prose"><h2 style="margin-top:0">Reach people looking for property, without the noise</h2>
+   <p>Own a house or land in <span data-pilot>Ado-Ekiti</span>? We list it through a registered Calvora agent, check it, and handle the enquiries and inspections, so you do not have to answer every call yourself.</p>
+   <h3>What we need from you</h3>
+   <ul><li>Your name and phone number</li><li>Proof that you own the property or are allowed to let or sell it</li><li>Your written permission for us to advertise it</li><li>The price and any fees you expect the customer to pay</li><li>Clear, honest photographs of the real property</li></ul>
+   <h3>How it works</h3>
+   <ol class="steps" style="grid-template-columns:1fr"><li><h3>Contact us</h3><p>Message us or speak to a Calvora agent.</p></li><li><h3>We visit and check</h3><p>Our team views the property and confirms your permission and the details.</p></li><li><h3>It goes live</h3><p>Once the checks are recorded, it appears in the right catalogue.</p></li><li><h3>We keep it current</h3><p>We re-confirm availability regularly so customers are not misled.</p></li></ol>
+   <p class="fine">Ask us about any fee before you agree to anything. Any charge will be explained in writing first, and a Calvora agent will never collect rent or deposits for you without authority.</p>
+  </div>
+  <div class="panel"><h3>Get started</h3><p class="muted">The quickest way is a WhatsApp message. Tell us what you own and where it is.</p>
+   <div class="acts-col"><a class="btn green" data-wa="Hello CALVORA, I would like to list my property." href="#" rel="noopener">Message us on WhatsApp</a><a class="btn line" data-tel href="#"></a><a class="btn line" href="contact.html">Send a message</a></div>
+   <div class="panel" style="margin-top:20px" id="landlordPanel"><h3>Prefer we call you?</h3><p class="muted">Leave your details and a member of our team will contact you. We will not publish anything until we have spoken to you and checked the property.</p>
+   <form id="llForm" novalidate><label for="ln">Your name</label><input id="ln" name="name" required maxlength="100" autocomplete="name">
+   <label for="lp">Phone number</label><input id="lp" name="phone" type="tel" required inputmode="tel" autocomplete="tel">
+   <label for="le">Email <span class="fine">(optional)</span></label><input id="le" name="email" type="email" autocomplete="email" maxlength="150">
+   <label for="la">Where is the property?</label><input id="la" name="area" required maxlength="120" placeholder="e.g. Ajilosun, Ado-Ekiti">
+   <label for="ld">What is it? <span class="fine">(optional)</span></label><textarea id="ld" name="details" maxlength="1000" rows="3" placeholder="e.g. 3-bedroom bungalow to let, or a 600 sqm plot for sale"></textarea>
+   <div class="trap" aria-hidden="true"><label>Website<input name="website" tabindex="-1" autocomplete="off"></label></div>
+   <div id="llBox" aria-live="polite"></div><button class="btn" type="submit" style="margin-top:14px">Ask Calvora to contact me</button></form></div>
+   <div class="safe">Never pay anyone to &ldquo;get your property listed&rdquo; unless you have checked their <a href="verify.html">Calvora ID</a> and the fee has been explained in writing.</div></div>
+ </div></section>
+</div>
+</main>
+<div id="ft"></div>
+<script src="js/config.js"></script>
+<script src="js/core.js"></script>
+<script>CV.mount("");</script>
+<script>CV.submitForm(document.getElementById("llForm"), "llBox", function (fd) {
+  return CV.rpc("submit_landlord_registration", { p_name: fd.get("name"), p_phone: fd.get("phone"), p_email: fd.get("email") || "", p_area: fd.get("area"), p_details: fd.get("details") || "" });
+}, "<b>Thank you.</b> We have your details and will contact you soon.");</script>
+<script>document.querySelectorAll('[data-pilot]').forEach(function(e){e.textContent=SITE.pilot.city;});</script>
+</body>
+</html>
