@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en-NG">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Our agents and leaderboard | Calvora Property Solutions</title>
+<meta name="description" content="Meet the registered Calvora agents. Badges are earned from real listings, completed deals and verified customer ratings.">
+<link rel="canonical" href="https://www.calvora.com.ng/agents.html">
+<meta property="og:title" content="Our agents and leaderboard | Calvora Property Solutions">
+<meta property="og:description" content="Meet the registered Calvora agents. Badges are earned from real listings, completed deals and verified customer ratings.">
+<meta property="og:image" content="https://www.calvora.com.ng/img/og.png">
+<meta name="theme-color" content="#012547">
+<link rel="icon" href="img/favicon.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/calvora.css">
+</head>
+<body>
+<div id="hd"></div>
+<main id="main">
+<section class="page-top"><div class="wrap">
+  <p class="crumb"><a href="index.html">Home</a> / Our agents</p>
+  <h1>Our agents</h1>
+  <p>Every Calvora agent is registered and has an ID number you can check online.</p>
+</div></section>
+<div class="wrap">
+  <section class="sec" style="padding-top:34px">
+    <div class="sec-head"><h2>Agent leaderboard</h2><span class="muted">Ranked by completed deals, then approved listings, then rating.</span></div>
+    <div id="agMsg" aria-live="polite"><div class="loading"><span class="pulse"></span>Loading agents&hellip;</div></div>
+    <div class="agrid" id="lb"></div>
+  </section>
+  <section class="sec">
+    <div class="sec-head"><h2>How badges are earned</h2></div>
+    <p class="lede">Badges are worked out automatically from our own records. Nobody can type one in, and uploading lots of listings is not enough on its own.</p>
+    <div class="tiers" id="tiers"></div>
+    <p class="fine" style="margin-top:14px">Only reviews that our staff have verified count towards an agent&rsquo;s rating. Suspended or expired agents lose their badge. These starting levels will be reviewed after the first few months.</p>
+  </section>
+  <section class="sec">
+    <div class="band"><div><h2>Want to be on this list?</h2><p>Apply as an agent partner. We check your identity, train you on our code of conduct and give you your own dashboard.</p></div><a class="btn green" href="agent.html">Become an agent partner</a></div>
+  </section>
+</div>
+</main>
+<div id="ft"></div>
+<script src="js/config.js"></script>
+<script src="js/core.js"></script>
+<script>CV.mount("agents");</script>
+<script>
+(function () {
+  document.getElementById("tiers").innerHTML = ["Bronze", "Silver", "Gold", "Diamond"].map(function (n) {
+    var b = CV.BADGES[n];
+    return '<div class="tier">' + CV.badge(n, 72) + "<h3>" + n + '</h3><div class="m">' + CV.esc(b.meaning) + "</div><p>" + CV.esc(b.need) + "</p></div>";
+  }).join("");
+  CV.get("public_agents?select=*&order=completed_transactions.desc,approved_listings.desc,avg_rating.desc,joined_at.asc&limit=60").then(function (r) {
+    var m = document.getElementById("agMsg");
+    if (!r.rows.length) { m.innerHTML = '<div class="empty"><h3>Our founding agents are being verified</h3><p>Agent profiles appear here once an agent has passed our identity and registration checks.</p><a class="btn" href="agent.html">Apply as an agent partner</a></div>'; return; }
+    m.innerHTML = "";
+    document.getElementById("lb").innerHTML = r.rows.map(function (a, i) { return CV.agentCard(a, i + 1); }).join("");
+  }).catch(function () { document.getElementById("agMsg").innerHTML = CV.problem("Agents could not load right now. Please try again shortly."); });
+})();
+</script>
+</body>
+</html>
