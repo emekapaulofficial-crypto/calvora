@@ -198,6 +198,8 @@
   /* ---------- header and footer ---------- */
   var NAV = [["rent", "rent.html", "Rent"], ["buy", "buy.html", "Buy"], ["land", "lands.html", "Land"], ["agents", "agents.html", "Agents"], ["safety", "safety.html", "Stay safe"], ["about", "about.html", "About"], ["contact", "contact.html", "Contact"]];
   CV.mount = function (active) {
+    /* An email link (confirm account, reset password) that lands on a public page: pass it on to the agent portal, which signs the person in. */
+    if (/[#&](access_token|error_code)=/.test(location.hash) && !/\/(agent|admin)\.html$/.test(location.pathname)) { location.replace("agent.html" + location.hash); return; }
     var sp = document.createElement("div"); sp.innerHTML = SPRITE; document.body.insertBefore(sp.firstChild, document.body.firstChild);
     var hd = document.getElementById("hd");
     if (hd) {
