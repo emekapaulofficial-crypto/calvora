@@ -3,8 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Property details | Calvora Property Solutions</title>
-<meta name="description" content="Property details, costs, verification status and agent on Calvora Property Solutions.">
+<title>List your property | Calvora Property Solutions</title>
+<meta name="description" content="List your house or land with Calvora. We verify it, handle enquiries and inspections, and keep availability current.">
+<link rel="canonical" href="https://www.calvora.com.ng/list-property.html">
+<meta property="og:title" content="List your property | Calvora Property Solutions">
+<meta property="og:description" content="List your house or land with Calvora. We verify it, handle enquiries and inspections, and keep availability current.">
+<meta property="og:image" content="https://www.calvora.com.ng/img/og.png">
 <meta name="theme-color" content="#012547">
 <link rel="icon" href="img/favicon.png">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
@@ -14,138 +18,43 @@
 </head>
 <body>
 <div id="hd"></div>
-<main id="main" class="wrap" style="padding-top:22px">
-  <div id="view"><div class="loading"><span class="pulse"></span>Loading property&hellip;</div></div>
+<main id="main">
+<section class="page-top"><div class="wrap">
+  <p class="crumb"><a href="index.html">Home</a> / List your property</p>
+  <h1>List your property</h1>
+  <p>We check it, advertise it and handle the enquiries.</p>
+</div></section>
+<div class="wrap">
+ <section class="sec" style="padding-top:34px"><div class="two">
+  <div class="prose"><h2 style="margin-top:0">Reach people looking for property, without the noise</h2>
+   <p>Own a house or land in <span data-pilot>Ado-Ekiti</span>? We list it through a registered Calvora agent, check it, and handle the enquiries and inspections, so you do not have to answer every call yourself.</p>
+   <h3>What we need from you</h3>
+   <ul><li>Your name and phone number</li><li>Proof that you own the property or are allowed to let or sell it</li><li>Your written permission for us to advertise it</li><li>The price and any fees you expect the customer to pay</li><li>Clear, honest photographs of the real property</li></ul>
+   <h3>How it works</h3>
+   <ol class="steps" style="grid-template-columns:1fr"><li><h3>Contact us</h3><p>Message us or speak to a Calvora agent.</p></li><li><h3>We visit and check</h3><p>Our team views the property and confirms your permission and the details.</p></li><li><h3>It goes live</h3><p>Once the checks are recorded, it appears in the right catalogue.</p></li><li><h3>We keep it current</h3><p>We re-confirm availability regularly so customers are not misled.</p></li></ol>
+   <p class="fine">Ask us about any fee before you agree to anything. Any charge will be explained in writing first, and a Calvora agent will never collect rent or deposits for you without authority.</p>
+  </div>
+  <div class="panel"><h3>Get started</h3><p class="muted">The quickest way is a WhatsApp message. Tell us what you own and where it is.</p>
+   <div class="acts-col"><a class="btn green" data-wa="Hello CALVORA, I would like to list my property." href="#" rel="noopener">Message us on WhatsApp</a><a class="btn line" data-tel href="#"></a><a class="btn line" href="contact.html">Send a message</a></div>
+   <div class="panel" style="margin-top:20px" id="landlordPanel"><h3>Prefer we call you?</h3><p class="muted">Leave your details and a member of our team will contact you. We will not publish anything until we have spoken to you and checked the property.</p>
+   <form id="llForm" novalidate><label for="ln">Your name</label><input id="ln" name="name" required maxlength="100" autocomplete="name">
+   <label for="lp">Phone number</label><input id="lp" name="phone" type="tel" required inputmode="tel" autocomplete="tel">
+   <label for="le">Email <span class="fine">(optional)</span></label><input id="le" name="email" type="email" autocomplete="email" maxlength="150">
+   <label for="la">Where is the property?</label><input id="la" name="area" required maxlength="120" placeholder="e.g. Ajilosun, Ado-Ekiti">
+   <label for="ld">What is it? <span class="fine">(optional)</span></label><textarea id="ld" name="details" maxlength="1000" rows="3" placeholder="e.g. 3-bedroom bungalow to let, or a 600 sqm plot for sale"></textarea>
+   <div class="trap" aria-hidden="true"><label>Website<input name="website" tabindex="-1" autocomplete="off"></label></div>
+   <div id="llBox" aria-live="polite"></div><button class="btn" type="submit" style="margin-top:14px">Ask Calvora to contact me</button></form></div>
+   <div class="safe">Never pay anyone to &ldquo;get your property listed&rdquo; unless you have checked their <a href="verify.html">Calvora ID</a> and the fee has been explained in writing.</div></div>
+ </div></section>
+</div>
 </main>
 <div id="ft"></div>
 <script src="js/config.js"></script>
 <script src="js/core.js"></script>
-<script>
-(function () {
-  var S = window.SITE, esc = CV.esc, view = document.getElementById("view");
-  var catKey = null;
-  CV.mount("");
-
-  function row(k, v, sub) { return '<tr><td>' + k + (sub ? "<small>" + sub + "</small>" : "") + "</td><td>" + v + "</td></tr>"; }
-
-  function costs(p) {
-    var r = [], total = Number(p.price);
-    var rent = p.listing_type === "rent";
-    r.push(row(rent ? "Rent" : "Price", CV.naira(p.price), rent ? "per year" : ""));
-    [["agency_fee", "Agency fee"], ["legal_fee", "Legal fee"], ["caution_fee", "Caution (security) fee"]].forEach(function (f) {
-      var v = Number(p[f[0]] || 0);
-      if (v > 0) { r.push(row(f[1], CV.naira(v))); total += v; }
-    });
-    r.push('<tr class="tot"><td><b>Total to pay</b><small>Based on the fees listed above</small></td><td>' + CV.naira(total) + "</td></tr>");
-    return '<table class="kv">' + r.join("") + "</table>" +
-      '<p class="fine" style="margin:10px 0 0">Ask for a written breakdown of any other charge before you pay. Never feel pressured to pay straight away.</p>';
-  }
-
-  function bank() {
-    var b = S.bank || {};
-    if (!b.accountNumber) return "";
-    return '<div class="bank"><b>Official payment account</b><dl><dt>Bank</dt><dd>' + esc(b.bankName) + "</dd><dt>Account name</dt><dd>" + esc(b.accountName) + "</dd><dt>Account number</dt><dd>" + esc(b.accountNumber) + "</dd></dl></div>";
-  }
-
-  function gallery(p) {
-    var ph = p.photo_urls || [];
-    if (!ph.length) return '<div class="gal"><div class="main"><div class="noph">Photos coming soon</div></div></div>';
-    return '<div class="gal"><div class="main"><img id="mainimg" src="' + esc(ph[0]) + '" alt="' + esc(p.title) + '"></div>' +
-      (ph.length > 1 ? '<div class="thumbs">' + ph.map(function (u, i) { return '<img src="' + esc(u) + '" alt="Photo ' + (i + 1) + ' of ' + ph.length + '" loading="lazy" tabindex="0"' + (i === 0 ? ' class="on"' : "") + ">"; }).join("") + "</div>" : "") + "</div>";
-  }
-
-  function render(p) {
-    var lab = CV.propLabel(p), cat = p.category === "land" ? "land" : p.listing_type === "rent" ? "rent" : "buy", C = CV.CATALOGUES[cat];
-    document.title = p.title + " | " + C.label + " | Calvora Property Solutions";
-    var desc = document.querySelector('meta[name=description]'); desc.content = (p.title + " in " + p.area + ", " + p.state + ". " + CV.naira(p.price) + (p.listing_type === "rent" ? " per year" : "") + ".").slice(0, 200);
-    var isLand = p.category === "land", closed = !!lab.closed;
-    var facts = [];
-    if (isLand) {
-      if (p.land_size_sqm) facts.push(CV.icon("area") + " " + Number(p.land_size_sqm).toLocaleString("en-NG") + " sqm");
-      if (p.land_title) facts.push(CV.icon("doc") + " " + esc(p.land_title));
-    } else {
-      if (p.bedrooms != null) facts.push(CV.icon("bed") + " " + p.bedrooms + " bedroom" + (p.bedrooms === 1 ? "" : "s"));
-      if (p.bathrooms != null) facts.push(CV.icon("bath") + " " + p.bathrooms + " bathroom" + (p.bathrooms === 1 ? "" : "s"));
-    }
-    facts.push(esc(p.property_type));
-    var av = p.agent_photo ? '<img class="av" src="' + esc(p.agent_photo) + '" alt="">' : '<span class="av av-i" aria-hidden="true">' + esc(CV.initials(p.agent_name)) + "</span>";
-    var wa = CV.waLink("Hello CALVORA, I am interested in " + p.title + " (" + p.listing_code + "). " + location.href);
-    var verifiedText = p.checks_recorded >= 4 ? "All four CALVORA checks are on record." : "Some CALVORA checks are on record.";
-    var confirmed = p.last_confirmed_at ? "Availability last confirmed " + CV.date(p.last_confirmed_at) + "." : "";
-
-    var forms = closed
-      ? '<div class="panel"><h3>This property is no longer available</h3><p class="muted">It has been closed. <a href="' + C.page + '">See other ' + C.label.toLowerCase() + "</a>.</p></div>"
-      : '<div class="panel" id="contactPanel"><div class="formtabs" role="tablist"><button type="button" role="tab" aria-selected="true" data-f="enq">Send enquiry</button>' + (isLand ? "" : "") + '<button type="button" role="tab" aria-selected="false" data-f="insp">Book inspection</button></div>' +
-        '<form id="enq" novalidate><label for="en">Your name</label><input id="en" name="name" required autocomplete="name" maxlength="100">' +
-        '<label for="ep">Phone number</label><input id="ep" name="phone" type="tel" required autocomplete="tel" inputmode="tel" placeholder="e.g. 0803 000 0000">' +
-        '<label for="ee">Email <span class="fine">(optional)</span></label><input id="ee" name="email" type="email" autocomplete="email" maxlength="150">' +
-        '<label for="em">Message</label><textarea id="em" name="message" required maxlength="1000">Hello, I am interested in ' + esc(p.title) + " (" + esc(p.listing_code) + ").</textarea>" +
-        '<div class="trap" aria-hidden="true"><label>Website<input name="website" tabindex="-1" autocomplete="off"></label></div>' +
-        '<div id="enqBox" aria-live="polite"></div><button class="btn" type="submit" style="width:100%;margin-top:14px">Send enquiry</button></form>' +
-        '<form id="insp" class="hidden" novalidate><label for="in">Your name</label><input id="in" name="name" required autocomplete="name" maxlength="100">' +
-        '<label for="ip">Phone number</label><input id="ip" name="phone" type="tel" required autocomplete="tel" inputmode="tel">' +
-        '<div class="grid2"><div><label for="id">Preferred date</label><input id="id" name="date" type="date" required></div><div><label for="it">Time</label><input id="it" name="time" type="time" required value="10:00"></div></div>' +
-        '<label for="ino">Note <span class="fine">(optional)</span></label><textarea id="ino" name="notes" maxlength="500" style="min-height:70px"></textarea>' +
-        '<div class="trap" aria-hidden="true"><label>Website<input name="website" tabindex="-1" autocomplete="off"></label></div>' +
-        '<div id="inspBox" aria-live="polite"></div><button class="btn" type="submit" style="width:100%;margin-top:14px">Request inspection</button>' +
-        '<p class="fine">An agent will confirm the time with you. A request is not a confirmed booking until you hear back.</p></form>' +
-        (wa ? '<a class="btn green" style="width:100%;margin-top:12px" href="' + wa + '" rel="noopener">' + CV.icon("wa") + " Chat with Calvora on WhatsApp</a>" : "") + "</div>";
-
-    view.innerHTML =
-      '<p class="crumb muted"><a href="index.html" style="color:var(--navy)">Home</a> / <a href="' + C.page + '" style="color:var(--navy)">' + C.label + "</a> / " + esc(p.listing_code) + "</p>" +
-      '<div class="pdp"><div>' + gallery(p) +
-      "<h1>" + esc(p.title) + "</h1>" +
-      '<p class="loc muted" style="display:flex;gap:6px;align-items:center;margin:0 0 10px">' + CV.icon("pin") + " " + esc(p.area) + ", " + esc(p.state) + '<span aria-hidden="true">·</span>' + esc(p.listing_code) + "</p>" +
-      '<ul class="facts" style="font-size:1rem;margin-bottom:6px">' + facts.map(function (f) { return '<li style="display:inline-flex;gap:6px;align-items:center">' + f + "</li>"; }).join("") + "</ul>" +
-      '<div class="two-status">' +
-        '<div><h4>Property status</h4><div class="v"><span class="chip ' + (lab.cls === "ok" ? "g" : "o") + '">' + esc(lab.text) + '</span></div><div class="s">' + (closed ? "" : esc(verifiedText) + " ") + esc(confirmed) + "</div></div>" +
-        '<div><h4>Agent record</h4><div class="v">' + CV.badge(p.agent_badge, 30) + "<span>" + esc(p.agent_badge) + ' agent</span></div><div class="s">Registered agent ' + esc(p.agent_code) + ". A badge shows the agent’s track record, not the property’s checks.</div></div></div>" +
-      (p.video_url ? '<p style="margin-top:18px"><a class="btn green" href="' + esc(p.video_url) + '" target="_blank" rel="noopener noreferrer">&#9654; Watch the property video</a></p>' : "") +
-      (p.description ? '<h2 style="font-size:1.3rem;margin-top:22px">About this property</h2><p style="white-space:pre-line">' + esc(p.description) + "</p>" : "") +
-      (p.features && p.features.length ? '<h2 style="font-size:1.3rem;margin-top:22px">Features</h2><ul class="feat">' + p.features.map(function (f) { return "<li>" + esc(f) + "</li>"; }).join("") + "</ul>" : "") +
-      "</div>" +
-      '<aside class="sticky"><div class="panel"><div class="bigprice">' + CV.naira(p.price) + " <small>" + CV.priceNote(p) + "</small></div>" +
-      '<h3 style="margin:16px 0 6px;font-size:1.02rem">What you pay</h3>' + costs(p) + bank() + '<div class="safe"><b>Pay safely.</b> Inspect first. Pay only by bank transfer to the official Calvora account, never to a personal account or in cash.</div></div>' +
-      '<div class="panel"><h3 style="font-size:1.02rem">Your agent</h3><div class="agent-box">' + av + '<div><b>' + esc(p.agent_name) + '</b><div class="muted small">' + esc(p.agent_code) + '</div><a class="small" href="agent-profile.html?code=' + encodeURIComponent(p.agent_code) + '">View profile and reviews</a></div></div></div>' +
-      forms + "</aside></div>";
-
-    // gallery thumbs
-    var main = document.getElementById("mainimg");
-    document.querySelectorAll(".thumbs img").forEach(function (t) {
-      function pick() { main.src = t.src; document.querySelectorAll(".thumbs img").forEach(function (x) { x.classList.remove("on"); }); t.classList.add("on"); }
-      t.addEventListener("click", pick); t.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(); } });
-    });
-    if (closed) return;
-    // tabs
-    var fb = document.querySelectorAll(".formtabs button");
-    fb.forEach(function (b) { b.addEventListener("click", function () {
-      fb.forEach(function (x) { x.setAttribute("aria-selected", x === b); });
-      document.getElementById("enq").classList.toggle("hidden", b.dataset.f !== "enq");
-      document.getElementById("insp").classList.toggle("hidden", b.dataset.f !== "insp");
-    }); });
-    var d = document.getElementById("id"), today = new Date(); today.setMinutes(today.getMinutes() - today.getTimezoneOffset()); d.min = today.toISOString().slice(0, 10);
-    CV.submitForm(document.getElementById("enq"), "enqBox", function (fd) {
-      return CV.rpc("submit_enquiry", { p_property: p.id, p_name: fd.get("name"), p_phone: fd.get("phone"), p_email: fd.get("email") || "", p_message: fd.get("message") });
-    }, "<b>Enquiry sent.</b> The Calvora team and the agent will contact you on the number you gave.");
-    CV.submitForm(document.getElementById("insp"), "inspBox", function (fd) {
-      var when = new Date(fd.get("date") + "T" + fd.get("time"));
-      if (isNaN(when)) throw new Error("Please choose a date and time.");
-      return CV.rpc("submit_inspection", { p_property: p.id, p_name: fd.get("name"), p_phone: fd.get("phone"), p_requested_at: when.toISOString(), p_notes: fd.get("notes") || "" });
-    }, "<b>Inspection requested.</b> An agent will confirm the time with you. You do not need to pay anything to view a property.");
-  }
-
-  async function init() {
-    var id = CV.qs().get("id") || "";
-    if (!id) { view.innerHTML = CV.problem("No property was chosen.") + '<p><a class="btn" href="index.html">Back to home</a></p>'; return; }
-    try {
-      var path = "public_properties?select=*&" + (CV.isUuid(id) ? "id=eq." + id : "listing_code=eq." + encodeURIComponent(id.toUpperCase())) + "&limit=1";
-      var r = await CV.get(path);
-      if (!r.rows.length) { view.innerHTML = '<div class="empty"><h3>We could not find that property</h3><p>It may have been removed or is not available any more.</p><a class="btn" href="rent.html">Browse houses for rent</a></div>'; return; }
-      render(r.rows[0]);
-    } catch (e) { view.innerHTML = CV.problem("This property could not load right now. Please try again.") + '<p><a class="btn line" href="javascript:location.reload()">Try again</a></p>'; }
-  }
-  init();
-})();
-</script>
+<script>CV.mount("");</script>
+<script>CV.submitForm(document.getElementById("llForm"), "llBox", function (fd) {
+  return CV.rpc("submit_landlord_registration", { p_name: fd.get("name"), p_phone: fd.get("phone"), p_email: fd.get("email") || "", p_area: fd.get("area"), p_details: fd.get("details") || "" });
+}, "<b>Thank you.</b> We have your details and will contact you soon.");</script>
+<script>document.querySelectorAll('[data-pilot]').forEach(function(e){e.textContent=SITE.pilot.city;});</script>
 </body>
 </html>
