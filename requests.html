@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en-NG">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Property requests | Calvora Property Solutions</title>
+<meta name="description" content="Tell Calvora what property you need in Ado-Ekiti. Post a public request or ask our concierge to find it for you.">
+<link rel="canonical" href="https://www.calvora.com.ng/requests.html">
+<meta property="og:title" content="Property requests | Calvora">
+<meta property="og:description" content="Post what you need, or ask our concierge to find it.">
+<meta property="og:image" content="https://www.calvora.com.ng/img/og.png?v=2">
+<meta name="theme-color" content="#012547">
+<link rel="icon" href="img/favicon.png?v=2">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png?v=2">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/calvora.css?v=26">
+</head>
+<body>
+<div id="hd"></div>
+<main id="main">
+<section class="page-top"><div class="wrap">
+  <p class="crumb"><a href="index.html">Home</a> / Property requests</p>
+  <h1>Tell us what you need</h1>
+  <p>Cannot find the right property? Post a request, or let a Calvora representative search for you.</p>
+</div></section>
+<div class="wrap">
+ <section class="sec" style="padding-top:34px">
+  <div class="formtabs" role="tablist" aria-label="Request type">
+   <button type="button" role="tab" aria-selected="true" data-tab="board">Request board</button>
+   <button type="button" role="tab" aria-selected="false" data-tab="concierge">Personal concierge</button>
+  </div>
+  <div id="tab-board" role="tabpanel"><div class="two" style="margin-top:18px">
+   <div class="panel"><h2 style="font-size:1.4rem">Post a request</h2>
+    <p class="muted">Your request is checked by our team, then shown on the board without your name or phone number. Agents reply through Calvora.</p>
+    <form id="rb" novalidate data-hide-on-ok="1">
+    <input type="hidden" name="kind" value="board">
+    <div class="grid2"><div><label for="rbt">I want to</label><select id="rbt" name="lt"><option value="rent">Rent</option><option value="buy">Buy a house</option><option value="land">Buy land</option></select></div>
+    <div><label for="rbp">Property type</label><input id="rbp" name="pt" maxlength="60" placeholder="e.g. 3 bedroom flat, 2 plots"></div></div>
+    <div class="grid2"><div><label for="rba">Area</label><input id="rba" name="area" required maxlength="120" placeholder="e.g. Ajilosun, Iworoko Road"></div>
+    <div><label for="rbb">Maximum budget (&#8358;)</label><input id="rbb" name="budget" inputmode="numeric" placeholder="e.g. 800000"></div></div>
+    <label for="rbd">Anything else we should know? <span class="fine">(do not write your phone number here)</span></label><textarea id="rbd" name="details" maxlength="1000"></textarea>
+    <div class="grid2"><div><label for="rbn">Your name</label><input id="rbn" name="name" maxlength="100" autocomplete="name"></div>
+    <div><label for="rbh">Phone / WhatsApp</label><input id="rbh" name="phone" type="tel" inputmode="tel" required autocomplete="tel"></div></div>
+    <div class="trap" aria-hidden="true"><label>Website<input name="website" tabindex="-1" autocomplete="off"></label></div>
+    <div id="rbBox" aria-live="polite"></div>
+    <button class="btn green" type="submit" style="margin-top:14px">Post my request</button>
+    <p class="fine" style="margin-top:10px">We show only the area, budget and details. Your phone number stays with Calvora.</p></form><div id="rbDone"></div></div>
+   <div><h2 style="font-size:1.4rem">Open requests</h2><div id="board" aria-live="polite"><p class="muted">Loading requests&hellip;</p></div></div>
+  </div></div>
+  <div id="tab-concierge" class="hidden" role="tabpanel"><div class="two" style="margin-top:18px">
+   <div class="panel"><h2 style="font-size:1.4rem">Ask our concierge</h2>
+    <p class="muted">Tell us what you need. A Calvora representative searches verified properties for you and contacts you. Nothing is shown publicly.</p>
+    <form id="rc" novalidate data-hide-on-ok="1">
+    <input type="hidden" name="kind" value="concierge">
+    <div class="grid2"><div><label for="rct">I want to</label><select id="rct" name="lt"><option value="rent">Rent</option><option value="buy">Buy a house</option><option value="land">Buy land</option></select></div>
+    <div><label for="rcp">Property type</label><input id="rcp" name="pt" maxlength="60" placeholder="e.g. 3 bedroom flat, 2 plots"></div></div>
+    <div class="grid2"><div><label for="rca">Area</label><input id="rca" name="area" required maxlength="120" placeholder="e.g. Ajilosun, Iworoko Road"></div>
+    <div><label for="rcb">Maximum budget (&#8358;)</label><input id="rcb" name="budget" inputmode="numeric" placeholder="e.g. 800000"></div></div>
+    <label for="rcd">Anything else we should know? <span class="fine">(do not write your phone number here)</span></label><textarea id="rcd" name="details" maxlength="1000"></textarea>
+    <div class="grid2"><div><label for="rcn">Your name</label><input id="rcn" name="name" maxlength="100" autocomplete="name"></div>
+    <div><label for="rch">Phone / WhatsApp</label><input id="rch" name="phone" type="tel" inputmode="tel" required autocomplete="tel"></div></div>
+    <div class="trap" aria-hidden="true"><label>Website<input name="website" tabindex="-1" autocomplete="off"></label></div>
+    <div id="rcBox" aria-live="polite"></div>
+    <button class="btn green" type="submit" style="margin-top:14px">Ask the concierge</button>
+    <p class="fine" style="margin-top:10px">Only the Calvora team sees this request.</p></form><div id="rcDone"></div></div>
+   <div class="prose"><h2 style="margin-top:0">What happens next</h2>
+    <ol class="steps" style="grid-template-columns:1fr"><li><h3>You send the details</h3><p>You get a reference number straight away.</p></li><li><h3>We search</h3><p>We look through verified properties and our agents&rsquo; listings.</p></li><li><h3>We contact you</h3><p>We send suitable options and help you book inspections.</p></li></ol>
+    <p class="fine">Never pay anyone before you have inspected a property. Read our <a href="safety.html">safety guide</a>.</p></div>
+  </div></div>
+ </section>
+</div>
+</main>
+<div id="ft"></div>
+<script src="js/config.js?v=26"></script>
+<script src="js/core.js?v=26"></script>
+<script>CV.mount("requests");</script>
+<script>
+(function () {
+  var tabs = document.querySelectorAll("[data-tab]");
+  function show(k) { tabs.forEach(function (b) { b.setAttribute("aria-selected", b.dataset.tab === k); document.getElementById("tab-" + b.dataset.tab).classList.toggle("hidden", b.dataset.tab !== k); }); }
+  tabs.forEach(function (b) { b.addEventListener("click", function () { show(b.dataset.tab); }); });
+  if (location.hash === "#concierge") show("concierge");
+  var LT = { rent: "To rent", buy: "To buy", land: "Land to buy" };
+  function wire(id) {
+    CV.submitForm(document.getElementById(id), id + "Box", function (fd) {
+      var b = String(fd.get("budget") || "").replace(/[^0-9]/g, "");
+      return CV.rpc("submit_property_request", { p_kind: fd.get("kind"), p_name: fd.get("name") || "", p_phone: fd.get("phone") || "", p_listing_type: fd.get("lt"), p_property_type: fd.get("pt") || "", p_area: fd.get("area") || "", p_budget: b ? Number(b) : null, p_bedrooms: null, p_details: fd.get("details") || "" });
+    }, function (ref) { return "<b>Request received.</b> Your reference number is <b style=\"font-size:1.15rem\">" + CV.esc(ref) + "</b>. Please keep it. We will contact you on the number you gave."; });
+  }
+  wire("rb"); wire("rc");
+  CV.get("public_requests?select=*&order=created_at.desc&limit=30").then(function (r) {
+    var box = document.getElementById("board");
+    if (!r.rows.length) { box.innerHTML = '<div class="panel"><p style="margin:0">No open requests yet. Post the first one.</p></div>'; return; }
+    box.innerHTML = r.rows.map(function (q) {
+      var msg = "Hello CALVORA, I have a property for request " + q.code + " (" + q.area + ").";
+      return '<div class="panel"><span class="chip g">' + (LT[q.listing_type] || "") + '</span> <span class="chip">' + CV.esc(q.code) + '</span>' +
+        '<h3 style="margin:10px 0 4px">' + CV.esc(q.property_type || "Property") + " in " + CV.esc(q.area) + '</h3>' +
+        (q.budget_max ? '<p style="margin:0 0 6px"><b>Budget up to ' + CV.naira(q.budget_max) + '</b></p>' : "") +
+        (q.details ? '<p class="muted" style="margin:0 0 8px">' + CV.esc(q.details) + '</p>' : "") +
+        '<p class="fine" style="margin:0 0 10px">Posted ' + CV.date(q.created_at) + '</p>' +
+        '<a class="btn sm" href="' + CV.esc(CV.waLink(msg)) + '" rel="noopener">I have this property</a></div>';
+    }).join("");
+  }).catch(function () { document.getElementById("board").innerHTML = '<div class="panel"><p style="margin:0">The board could not load right now. You can still post a request.</p></div>'; });
+})();
+</script>
+</body>
+</html>
