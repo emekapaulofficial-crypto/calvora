@@ -8,14 +8,14 @@
 <link rel="canonical" href="https://www.calvora.com.ng/">
 <meta property="og:title" content="Calvora Property Solutions: Property. Trust. Opportunity.">
 <meta property="og:description" content="Verified homes and land in Ado-Ekiti, with accountable agents and clear fees.">
-<meta property="og:image" content="https://www.calvora.com.ng/img/og.png">
+<meta property="og:image" content="https://www.calvora.com.ng/img/og.png?v=2">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#012547">
-<link rel="icon" href="img/favicon.png">
-<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="icon" href="img/favicon.png?v=2">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png?v=2">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/calvora.css">
+<link rel="stylesheet" href="css/calvora.css?v=26">
 </head>
 <body>
 <div id="hd"></div>
@@ -27,24 +27,19 @@
     <div>
       <span class="eyebrow"><i></i> Now opening in Ado-Ekiti</span>
       <h1>Find a home you can trust.</h1>
-      <p class="lead">Houses to rent, houses to buy and land for sale, from agents who are registered with us and properties our team has checked. Fees are explained before you pay.</p>
-      <div class="acts">
-        <a class="btn green" href="rent.html">Browse houses for rent</a>
-        <a class="btn line" href="list-property.html">List your property</a>
+      <p class="lead">Houses to rent, houses to buy and land for sale in Ado-Ekiti. Every fee is explained before you pay.</p>
+      <h2 class="pickq">What are you looking for?</h2>
+      <div class="pick3" role="group" aria-label="Choose what you want">
+        <button type="button" class="pickbtn" data-k="rent"><span class="pt"><b>Houses for rent</b><small class="cnt" data-count="rent"></small></span><span class="arr" aria-hidden="true">&rarr;</span></button>
+        <button type="button" class="pickbtn" data-k="buy"><span class="pt"><b>Houses for sale</b><small class="cnt" data-count="buy"></small></span><span class="arr" aria-hidden="true">&rarr;</span></button>
+        <button type="button" class="pickbtn" data-k="land"><span class="pt"><b>Lands for sale</b><small class="cnt" data-count="land"></small></span><span class="arr" aria-hidden="true">&rarr;</span></button>
       </div>
+      <p class="pickmore"><a href="list-property.html">Have a property? List it here</a></p>
     </div>
-    <aside class="checks" aria-label="How a property becomes verified">
-      <h2>A property is called verified only after four checks</h2>
-      <ol>
-        <li>The agent&rsquo;s identity is checked</li>
-        <li>Our team views the property</li>
-        <li>The owner&rsquo;s permission to advertise is checked</li>
-        <li>The details are recently confirmed with the owner</li>
-      </ol>
-      <p>Each check is recorded with evidence. If it is not on record, we do not say it.</p>
-    </aside>
   </div>
 </section>
+
+<p class="reg-line">Registered company &middot; Company registration NO. <b>10013264</b></p>
 
 <div class="finder" id="finder">
   <div class="tabs" role="tablist" aria-label="What are you looking for?">
@@ -53,35 +48,12 @@
     <button type="button" role="tab" aria-selected="false" data-k="land" id="t-land">Land</button>
   </div>
   <form id="finderForm" role="tabpanel" aria-labelledby="t-rent">
-    <div><label for="fq">Area or state</label><input id="fq" name="q" placeholder="e.g. Ado-Ekiti, Ijigbo" autocomplete="off"></div>
+    <div><label for="fq">Area or street</label><input id="fq" name="q" placeholder="e.g. Ajilosun" autocomplete="off"></div>
     <div><label for="ftype" id="ftypeL">Property type</label><select id="ftype" name="type"></select></div>
     <div><label for="fmax" id="fmaxL">Max. rent per year</label><select id="fmax" name="max"></select></div>
     <button class="btn" type="submit">Search</button>
   </form>
 </div>
-
-<section class="sec">
-  <div class="wrap">
-    <div class="sec-head"><h2>Three places to look</h2><span class="muted">Each property appears in one place only.</span></div>
-    <div class="three">
-      <a class="door" href="rent.html">
-        <div class="ico-door"><svg viewBox="0 0 24 24"><path d="M3 11 12 4l9 7M5.500 9.500V20h13V9.500M10 20v-5h4v5"/></svg></div>
-        <h3>Houses for rent</h3><span class="cnt" data-count="rent"></span>
-        <p>Rooms, self-contained, flats and houses. Rent is shown per year with every fee listed.</p><span>See houses for rent &rarr;</span>
-      </a>
-      <a class="door" href="buy.html">
-        <div class="ico-door"><svg viewBox="0 0 24 24"><path d="M3 11 12 4l9 7M5.500 9.500V20h13V9.500"/><path d="M9.500 14.500h5M12 12v5"/></svg></div>
-        <h3>Houses for sale</h3><span class="cnt" data-count="buy"></span>
-        <p>Bungalows, duplexes, terraces and apartments for sale, with the full cost laid out.</p><span>See houses for sale &rarr;</span>
-      </a>
-      <a class="door" href="lands.html">
-        <div class="ico-door"><svg viewBox="0 0 24 24"><path d="M3 18 8 8l5 6 3-4 5 8zM3 21h18"/></svg></div>
-        <h3>Lands for sale</h3><span class="cnt" data-count="land"></span>
-        <p>Plots with the size and title document shown up front, so you know what you are buying.</p><span>See land for sale &rarr;</span>
-      </a>
-    </div>
-  </div>
-</section>
 
 <div id="latest"></div>
 <div id="homeMsg" class="wrap"></div>
@@ -90,18 +62,15 @@
   <div class="wrap">
     <div class="trust">
       <div>
-        <h2>Verified means something here</h2>
-        <p>Agent verification and property verification are two different things, and we never mix them up.</p>
-        <p><b>Property label.</b> &ldquo;Verification Completed&rdquo; appears only when all four checks are recorded in our system.</p>
-        <p><b>Agent badge.</b> Bronze, Silver, Gold and Diamond are earned from real listings, completed deals and customer ratings, never from how many photos an agent uploads.</p>
+        <h2>Why people trust us</h2>
+        <p>Every agent is registered. Every property is checked by our team before it goes live.</p>
         <a class="btn line" href="safety.html">How we keep you safe</a>
       </div>
       <ul class="ticks">
-        <li>Every agent is registered and has an ID number you can check on our website</li>
-        <li>No property goes live until our team has recorded the owner&rsquo;s permission</li>
-        <li>Fees are shown on the listing and explained before you pay anything</li>
-        <li>Payments go by bank transfer to the official company account only</li>
-        <li>Complaints get a reference number and a written outcome</li>
+        <li>Agents have an ID you can check on this site</li>
+        <li>Our team reviews every property before it goes live</li>
+        <li>Fees are shown before you pay</li>
+        <li>You pay by bank transfer to the company account only</li>
       </ul>
     </div>
   </div>
@@ -111,10 +80,10 @@
   <div class="wrap">
     <div class="sec-head"><h2>How it works</h2></div>
     <ol class="steps">
-      <li><h3>Browse</h3><p>Search by area and price. Look at the costs and the labels on each property.</p></li>
-      <li><h3>Ask or book</h3><p>Send an enquiry or book an inspection. Your request is saved, so it does not get lost.</p></li>
-      <li><h3>Visit with an agent</h3><p>A registered Calvora agent shows you the property. Check their ID on this site first.</p></li>
-      <li><h3>Decide and pay safely</h3><p>If you go ahead, pay by bank transfer to the official account and keep the receipt.</p></li>
+      <li><h3>Browse</h3><p>Search by area and price.</p></li>
+      <li><h3>Ask or book</h3><p>Send an enquiry or book a visit.</p></li>
+      <li><h3>Visit with an agent</h3><p>A registered agent shows you the property.</p></li>
+      <li><h3>Decide and pay safely</h3><p>Pay by bank transfer to the company account and keep the receipt.</p></li>
     </ol>
   </div>
 </section>
@@ -138,11 +107,12 @@
   </div>
 </section>
 
+<div class="wrap"><section class="sec"><div class="band"><div><h2>Cannot find what you need?</h2><p>Post a request or ask our concierge. We will help you find a verified property.</p></div><a class="btn green" href="requests.html">Tell us what you need</a></div></section></div>
 </main>
 <div id="ft"></div>
 
-<script src="js/config.js"></script>
-<script src="js/core.js"></script>
+<script src="js/config.js?v=26"></script>
+<script src="js/core.js?v=26"></script>
 <script>
 (function () {
   CV.mount("home");
@@ -173,6 +143,9 @@
     [["q", f.q.value.trim()], ["type", f.type.value], ["max", f.max.value]].forEach(function (p) { if (p[1]) u.set(p[0], p[1]); });
     location.href = CAT[cur].page + (u.toString() ? "?" + u : "");
   });
+
+  /* ---- the three big buttons open the listing pages ---- */
+  document.querySelectorAll(".pickbtn").forEach(function (b) { b.addEventListener("click", function () { location.href = CAT[b.dataset.k].page; }); });
 
   /* ---- live counts and latest listings ---- */
   function q(c, n) { var k = CAT[c]; return "public_properties?select=*&listing_type=eq." + k.listing_type + "&category=eq." + k.category + "&status=eq.approved&order=published_at.desc.nullslast,created_at.desc&limit=" + n; }
