@@ -71,3 +71,29 @@
 .cv-agent-responsibilities label{display:flex;align-items:center;gap:9px;padding:12px 14px;border:1px solid #dce5ed;border-radius:10px;background:#f7f9fb;color:#173b5d;font-weight:700}
 .cv-agent-responsibilities input{accent-color:#7bd441;width:17px;height:17px}
 @media(max-width:520px){.cv-agent-responsibilities{grid-template-columns:1fr}}
+
+/* V38 report charts (line + donut) */
+.rc-wrap{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:16px;margin:0 0 18px}
+.rc-wrap>.panel,.rc-social{margin:0 0 18px;border:1px solid #dce5ed;border-radius:15px;box-shadow:0 5px 18px rgba(1,37,71,.045);padding:22px}
+.rc-wrap>.panel{margin:0}
+.rc-hd{margin-bottom:10px}.rc-hd h3{margin:0}
+.rc-cv{position:relative;width:100%}
+.rc-line{height:300px}.rc-dn{height:210px;margin:6px 0 12px}
+.rc-cv .state{padding:40px 10px;text-align:center;color:#68798a}
+.rc-pimg{display:none;width:100%;height:auto}
+.rc-leg{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.rc-leg li{display:grid;grid-template-columns:12px 1fr auto 44px;gap:10px;align-items:center;font-size:.9rem;color:#33485c}
+.rc-leg i{width:12px;height:12px;border-radius:50%}
+.rc-leg b{color:#012547}.rc-leg em{font-style:normal;color:#7a8a99;text-align:right;font-size:.82rem}
+.rc-social-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:24px;align-items:center}
+@media(max-width:860px){.rc-wrap,.rc-social-grid{grid-template-columns:1fr}.rc-line{height:260px}}
+@media print{
+ body.print-summary #hd,body.print-summary #ft,body.print-summary .page-top,body.print-summary .whoami,body.print-summary .side,body.print-summary .report-filter,body.print-summary .report-heading button,body.print-summary [data-print-agent]{display:none!important}
+ body.print-summary .portal,body.print-summary #app,body.print-summary #pane{display:block!important;width:100%!important;margin:0!important;padding:0!important}
+ body.print-agent-reports .side,body.print-agent-one .side,body.print-scorecard .side{display:none!important}
+ body.print-agent-reports .portal,body.print-agent-one .portal,body.print-scorecard .portal{display:block!important}
+ body.print-agent-reports .rc-wrap,body.print-agent-reports .rc-social,body.print-agent-one .rc-wrap,body.print-agent-one .rc-social{display:none!important}
+ .rc-cv canvas{display:none!important}.rc-pimg{display:block!important}
+ .rc-wrap{grid-template-columns:1fr 1fr}.rc-card,.rc-social,.report-kpis>div{break-inside:avoid;box-shadow:none!important}
+ .rc-line{height:auto}.rc-dn{height:auto}
+}
