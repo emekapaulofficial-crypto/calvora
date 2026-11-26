@@ -166,5 +166,5 @@
     return '<h2>My ID card</h2><p class="muted">Show this card to customers. Anyone can scan the QR code to check that it is genuine and still valid.</p>' + PT.idCard(p, opt) +
       '<p style="margin-top:16px"><button class="btn" id="printid" type="button">Print my ID card</button></p><p class="fine">Print on card stock at 100% scale. If your card shows as expired, ask the Calvora team to renew it.</p>';
   };
-  PT.bindId = function () { PT.drawQr(); var b = PT.$("#printid"); if (b) b.onclick = function () { window.print(); }; };
+  PT.bindId = function () { PT.drawQr(); var b = PT.$("#printid"); if (b) b.onclick = function () { document.body.classList.add("print-idcard"); window.print(); setTimeout(function () { document.body.classList.remove("print-idcard"); }, 500); }; };
 })();
