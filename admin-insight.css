@@ -1,0 +1,73 @@
+/* CALVORA reporting centre — executive weekly scorecard, printable agent reports and staff chat */
+.report-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:4px 0 18px}
+.report-heading h2{font-size:clamp(1.55rem,3vw,2rem);margin:2px 0;color:#012547}
+.report-heading .muted{margin:4px 0 0}
+.eyebrow{font-size:.72rem;letter-spacing:.13em;font-weight:800;color:#4b9e29;margin:0 0 5px}
+.report-filter{display:flex;align-items:end;gap:18px;flex-wrap:wrap;margin-bottom:16px}
+.report-filter span{margin-left:auto;color:#627386;font-size:.84rem;font-weight:700}
+.report-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:14px 0 18px}
+.report-kpis>div{background:#fff;border:1px solid #dce5ed;border-top:3px solid #7bd441;border-radius:13px;padding:16px;min-width:0;box-shadow:0 5px 16px rgba(1,37,71,.045)}
+.report-kpis small{display:block;font-size:.67rem;letter-spacing:.1em;color:#68798a;font-weight:800;margin-bottom:7px}
+.report-kpis b{display:block;font-family:var(--display);font-size:1.8rem;line-height:1.1;color:#012547}
+.report-kpis span{display:block;font-size:.84rem;color:#627386;margin-top:5px}
+.score-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;align-items:stretch}
+.score-grid>.panel{margin:0;padding:22px;border:1px solid #dce5ed;border-radius:15px;box-shadow:0 5px 18px rgba(1,37,71,.045)}
+.score-grid h3,.score-issues h3{margin:0 0 16px;color:#012547;font-size:1.2rem}
+.score-row{display:flex;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid #e9eef3;color:#4b5d70}
+.score-row b{color:#012547;white-space:nowrap}
+.score-row.score-total{border-top:2px solid #7bd441;border-bottom:0;margin-top:4px;padding-top:16px;font-size:1.04rem;font-weight:800;color:#012547}
+.score-row.score-total b{font-size:1.2rem}
+.score-finance form{border-top:1px solid #e9eef3;margin-top:14px;padding-top:14px}
+.score-finance form label{display:block;font-size:.87rem;font-weight:700;color:#173b5d;margin:10px 0 6px}
+.score-finance form input,.score-finance form textarea{width:100%;border:1px solid #cbd7e2;border-radius:9px;padding:11px;font:inherit;color:#012547;background:#fff}
+.score-bars>div{display:grid;grid-template-columns:1fr auto;gap:8px;margin:18px 0;color:#42576b;font-size:.9rem}
+.score-bars b{color:#012547}.score-bars i{grid-column:1/-1;height:10px;border-radius:99px;background:#edf2f6;overflow:hidden}.score-bars u{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#7bd441,#3e9e20);text-decoration:none}
+.score-issues{margin-top:16px;padding:20px;border:1px solid #dce5ed;border-radius:14px;background:#fff}.score-issues p:last-child{white-space:pre-wrap;color:#4b5d70}
+.agent-report-card{background:#fff;border:1px solid #dce5ed;border-radius:16px;padding:20px;margin:16px 0;box-shadow:0 6px 20px rgba(1,37,71,.055);break-inside:avoid}
+.agent-report-card>header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;border-bottom:1px solid #e9eef3;padding-bottom:14px}
+.agent-report-card>header small{font-size:.68rem;letter-spacing:.12em;font-weight:800;color:#4b9e29}
+.agent-report-card h3{margin:4px 0 2px;color:#012547;font-size:1.3rem}.agent-report-card header p{margin:0;color:#667789;font-size:.86rem}
+.ar-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}
+.ar-summary>div{background:#f4f7fa;border-radius:10px;padding:12px}.ar-summary b{display:block;color:#012547;font-size:1.45rem}.ar-summary span{font-size:.78rem;color:#617286}
+.ar-visual{display:grid;grid-template-columns:190px 1fr;gap:22px;align-items:center;padding:12px 0}
+.ar-donut{width:166px;height:166px;border-radius:50%;background:conic-gradient(var(--mix));display:grid;place-items:center;margin:auto;position:relative}
+.ar-donut:before{content:"";position:absolute;inset:18px;background:#fff;border-radius:50%;box-shadow:inset 0 0 0 1px #edf1f4}
+.ar-donut>div{position:relative;text-align:center;display:flex;flex-direction:column}.ar-donut b{font-size:1.8rem;color:#012547}.ar-donut small{font-size:.76rem;color:#6a7887}
+.ar-bars h4{margin:0 0 10px;color:#012547}.ar-metric{margin:8px 0}.ar-metric>div{display:flex;justify-content:space-between;gap:12px;font-size:.82rem;color:#4b5d70}.ar-metric b{color:#012547}.ar-metric i{display:block;height:7px;background:#edf1f5;border-radius:99px;overflow:hidden;margin-top:4px}.ar-metric u{display:block;height:100%;border-radius:99px}
+.ar-notes{background:#f7f9fb;border-left:3px solid #7bd441;padding:11px 14px;border-radius:0 9px 9px 0}.ar-notes b{font-size:.84rem;color:#012547}.ar-notes p{margin:5px 0 0;color:#526579;white-space:pre-wrap;font-size:.88rem}
+.agent-report-card>footer{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:14px;padding-top:10px;border-top:1px solid #e9eef3;color:#7b8997;font-size:.67rem;letter-spacing:.04em}
+.outstanding{border-left:4px solid #e5a43b}.outstanding h3{margin-top:0;color:#012547}
+.chat-shell{border:1px solid #dce5ed;border-radius:16px;overflow:hidden;background:#fff;box-shadow:0 6px 20px rgba(1,37,71,.05)}
+.chat-top{padding:15px 18px;background:#012547;color:#fff;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}.chat-top span{font-size:.8rem;color:#d2e2f0}
+.chat-feed{height:min(58vh,560px);min-height:260px;overflow:auto;padding:18px;background:linear-gradient(#f6f9fc,#fff)}
+.chat-message{display:flex;gap:10px;align-items:flex-start;margin:0 0 16px;max-width:85%}.chat-message.mine{margin-left:auto;flex-direction:row-reverse}.chat-avatar{width:36px;height:36px;flex:none;border-radius:50%;display:grid;place-items:center;background:#e5f5da;color:#174c16;font-weight:800}.chat-message>div:last-child{background:#fff;border:1px solid #e1e8ef;border-radius:4px 13px 13px 13px;padding:10px 13px;box-shadow:0 2px 7px rgba(1,37,71,.04)}.chat-message.mine>div:last-child{background:#eef7e8;border-color:#d8edca;border-radius:13px 4px 13px 13px}.chat-message b{font-size:.86rem;color:#012547}.chat-message small{display:block;color:#7b8997;font-size:.7rem;margin-top:1px}.chat-message p{margin:7px 0 0;color:#34495d;line-height:1.45;overflow-wrap:anywhere}.chat-compose{display:flex;gap:10px;padding:14px;border-top:1px solid #e5ebf1}.chat-compose textarea{flex:1;min-width:0;resize:vertical;border:1px solid #cbd7e2;border-radius:10px;padding:11px;font:inherit}.chat-empty{padding:60px 20px;text-align:center;color:#728194}
+@media(max-width:760px){.report-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.score-grid{grid-template-columns:1fr}.ar-visual{grid-template-columns:1fr}.ar-bars{width:100%}.chat-message{max-width:100%}.report-filter span{margin-left:0}}
+@media(max-width:460px){.report-kpis{gap:8px}.report-kpis>div{padding:12px}.report-kpis b{font-size:1.4rem}.ar-summary{grid-template-columns:1fr 1fr}.agent-report-card{padding:14px}.agent-report-card>header{flex-direction:column}.chat-compose{flex-direction:column}.chat-compose .btn{width:100%}}
+@media print{
+ @page{size:A4 portrait;margin:12mm}
+ body.print-scorecard #hd,body.print-scorecard #ft,body.print-scorecard .page-top,body.print-scorecard .whoami,body.print-scorecard .sb,body.print-scorecard .report-heading button,body.print-scorecard #sf button,body.print-scorecard #sf label,body.print-scorecard #sf input,body.print-scorecard #sf textarea{display:none!important}
+ body.print-scorecard #app,body.print-scorecard #pane{display:block!important;width:100%!important;margin:0!important;padding:0!important}
+ body.print-scorecard .panel,body.print-scorecard .report-kpis>div{box-shadow:none!important;break-inside:avoid}
+ body.print-agent-reports #hd,body.print-agent-reports #ft,body.print-agent-reports .page-top,body.print-agent-reports .whoami,body.print-agent-reports .report-heading,body.print-agent-reports .report-filter,body.print-agent-reports .report-kpis,body.print-agent-reports .outstanding,body.print-agent-reports .fine{display:none!important}
+ body.print-agent-reports #app,body.print-agent-reports #pane{display:block!important;width:100%!important;margin:0!important;padding:0!important}
+ body.print-agent-one #hd,body.print-agent-one #ft,body.print-agent-one .page-top,body.print-agent-one .whoami,body.print-agent-one .report-heading,body.print-agent-one .report-filter,body.print-agent-one .report-kpis,body.print-agent-one .agent-report-card:not(.print-selected){display:none!important}
+ body.print-agent-one #app,body.print-agent-one #pane{display:block!important;width:100%!important;margin:0!important;padding:0!important}
+ .agent-report-card{box-shadow:none!important;border:1px solid #cbd5df!important;margin:0 0 10mm!important}
+}
+
+/* Weekly accountability additions */
+.gap-red{color:#C81F1A!important}
+.report-growth{margin:12px 0 4px;padding:10px 12px;border-radius:9px;background:#f3f7fa;color:#42576b;font-size:.84rem}
+.report-growth b{color:#012547}
+.team-call-score{grid-column:1/-1;margin-top:16px;padding:20px;border:1px solid #dce5ed;border-radius:14px;background:#fff}
+.team-call-score h3{margin:0 0 14px;color:#012547}
+.team-call-row{display:grid;grid-template-columns:minmax(130px,1.2fr) 90px minmax(100px,2fr) 110px minmax(100px,2fr);gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid #edf1f5;font-size:.84rem;color:#4b5d70}
+.team-call-row b{color:#012547}.team-call-row i{display:block;height:9px;background:#edf1f5;border-radius:99px;overflow:hidden}.team-call-row u{display:block;height:100%;border-radius:99px;background:#7bd441;text-decoration:none}.team-call-row u.missing{background:#e5322d}
+@media(max-width:700px){.team-call-row{grid-template-columns:1fr 70px;gap:5px}.team-call-row i{grid-column:1/-1}.team-call-row span:nth-of-type(2){grid-column:1/-1}}
+@media print{.report-growth{background:#fff;border:1px solid #dce5ed}}
+
+/* V37 agent responsibility controls — uses the existing CALVORA palette */
+.cv-agent-responsibilities{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0 18px}
+.cv-agent-responsibilities label{display:flex;align-items:center;gap:9px;padding:12px 14px;border:1px solid #dce5ed;border-radius:10px;background:#f7f9fb;color:#173b5d;font-weight:700}
+.cv-agent-responsibilities input{accent-color:#7bd441;width:17px;height:17px}
+@media(max-width:520px){.cv-agent-responsibilities{grid-template-columns:1fr}}
