@@ -154,6 +154,9 @@
       card("w6", "c8", "Company Performance Summary", "", "pie") +
       card("w6", "c3", "Company Growth", seg("growth", [["properties", "Properties"], ["sales", "Sales"], ["leads", "Customers"], ["income", "Income"]]), "trend") +
       card("w6", "c4", "Agent Performance", seg("agent", [["sales", "Sales"], ["revenue", "Revenue"], ["submitted", "Submitted"], ["verified", "Verified"]]), "trophy") +
+      card("w6", "c9", "Social Media Views, Engagement & Followers", "", "trend") +
+      card("w6", "c10", "Social Media Leads by Channel", "", "pie") +
+      card("w12", "c11", "Weekly Calls & Follow-ups by Team Member", "", "bars") +
       card("w12", "c7", "Saved Reports (weekly and monthly)", "", "bars") +
       '<div class="card w12" id="tgbox" hidden></div>';
     $("#sy").onchange = function () { st.sales = this.value; drawSales(); };
@@ -178,10 +181,12 @@
       safe(sb.from("commissions").select("id,status").limit(10000)),
       safe(sb.from("complaints").select("id,status").limit(10000)),
       safe(sb.from("profiles").select("id,full_name,agent_code,status").eq("role", "agent").limit(2000)),
-      safe(sb.from("management_targets").select("*"))
+      safe(sb.from("management_targets").select("*")),
+      safe(sb.from("profiles").select("id,full_name,agent_code,staff_code,role,staff_role,status").in("role", ["agent", "staff"]).eq("status", "active").limit(2000)),
+      safe(sb.from("team_weekly_reports").select("user_id,week_start,calls_made,follow_up_calls,answered_calls,new_leads,social_metrics,submitted_at,agent_responsibilities,rental_enquiries,rental_transactions,land_opportunities,land_inspections,verified_properties,revenue_generated,commission_earned").limit(10000))
     ]);
-    D = { props: res[0], tx: res[1], fin: res[2], leads: res[3], com: res[4], cmp: res[5], agents: res[6], targets: res[7] || [] };
-    kpis(); drawSales(); drawMoney(); drawTop(); drawHealth(); drawAlerts(); drawPerf(); drawGrowth(); drawAgents(); drawSaved();
+    D = { props: res[0], tx: res[1], fin: res[2], leads: res[3], com: res[4], cmp: res[5], agents: res[6], targets: res[7] || [], team: res[8] || [], teamReports: res[9] };
+    kpis(); drawSales(); drawMoney(); drawTop(); drawHealth(); drawAlerts(); drawPerf(); drawGrowth(); drawAgents(); drawTeamReports(); drawSaved();
   }
 
   /* ---------- KPI cards ---------- */
@@ -302,6 +307,31 @@
     if (ld.length) { v = rs / ld.length * 100; out.push(ring(v, "#F59E0B", "Customer Response", v >= 100 ? "\u2713 All answered" : "\u2193 " + Math.round(100 - v) + "% Pending", v >= 100 ? "ok" : "")); }
     else out.push(ring(null, "#F59E0B", "Customer Response", "No leads in this period", "na"));
     setBody("c5", '<div class="rings">' + out.join("") + "</div>");
+  }
+
+  /* ---------- Weekly team and social-media reporting ---------- */
+  var SOCIAL_CHANNELS = [["tiktok", "TikTok"], ["facebook", "Facebook"], ["whatsapp", "WhatsApp"], ["instagram", "Instagram"], ["youtube", "YouTube"]];
+  function drawTeamReports() {
+    if (!D.teamReports) {
+      empty("c9", "Weekly social and team reports are not available yet. Run the team_weekly_reports.sql migration and ask the team to submit reports.");
+      empty("c10", "Social channel leads will appear after reports are submitted.");
+      empty("c11", "Team call activity will appear after reports are submitted.");
+      return;
+    }
+    var prev = prevRange(), curRows = D.teamReports.filter(function(r){return within(r.week_start,R[0],R[1]);}), prevRows = D.teamReports.filter(function(r){return within(r.week_start,prev[0],prev[1]);});
+    function sums(rows, metric) { return SOCIAL_CHANNELS.map(function(ch){return rows.reduce(function(n,r){var v=(r.social_metrics||{})[ch[0]]||{};return n+(Number(v[metric])||0);},0);}); }
+    var views=sums(curRows,"views"), likes=sums(curRows,"likes"), followers=sums(curRows,"followers"), leads=sums(curRows,"leads"), pviews=sums(prevRows,"views"), plikes=sums(prevRows,"likes"), pfollowers=sums(prevRows,"followers"), pleads=sums(prevRows,"leads");
+    var sum=function(a){return a.reduce(function(n,v){return n+v;},0);};
+    function growth(now,before){if(!before&&!now)return "No activity recorded";if(!before)return "New activity this period";var pc=Math.round((now-before)/before*100);return (pc>0?"↑ ":pc<0?"↓ ":"")+Math.abs(pc)+"% vs previous period";}
+    mk("c9",{type:"bar",data:{labels:SOCIAL_CHANNELS.map(function(x){return x[1];}),datasets:[{label:"Views / reach",data:views,backgroundColor:views.map(function(v){return v?NAVY:RED;}),borderRadius:5},{label:"Likes / reactions",data:likes,backgroundColor:likes.map(function(v){return v?GREEN:RED;}),borderRadius:5},{label:"Followers / subscribers gained",data:followers,backgroundColor:followers.map(function(v){return v?"#2D86D6":RED;}),borderRadius:5}]},options:opts({scales:{x:{grid:{display:false}},y:{beginAtZero:true,grid:GRID,ticks:{precision:0}}},plugins:{legend:{position:"top",align:"end"}}})},"Views: "+growth(sum(views),sum(pviews))+" · Likes: "+growth(sum(likes),sum(plikes))+" · Followers: "+growth(sum(followers),sum(pfollowers))+". WhatsApp uses Status views and reactions; follower gains should only be entered where meaningful.");
+    var leadColors=["#7BD441","#012547","#2D86D6","#3FC9A0","#8E5BC0"];
+    if(sum(leads)) mk("c10",{type:"doughnut",data:{labels:SOCIAL_CHANNELS.map(function(x){return x[1];}),datasets:[{data:leads,backgroundColor:leadColors,borderColor:"#fff",borderWidth:3,hoverOffset:5}]},options:opts({cutout:"66%",plugins:{legend:{position:"right"}}})},"Total social leads: "+sum(leads)+" · "+growth(sum(leads),sum(pleads))+".");
+    else mk("c10",{type:"doughnut",data:{labels:["No leads reported"],datasets:[{data:[1],backgroundColor:[RED],borderColor:"#fff",borderWidth:3}]},options:opts({cutout:"66%",plugins:{legend:{display:false},tooltip:{enabled:false}}})},"No social-media leads reported in this period. Red indicates the gap to investigate.");
+    var team=D.team||[], names={}, activity={};team.forEach(function(p){names[p.id]=p.full_name||p.agent_code||p.staff_code||"Team member";activity[p.id]={calls:0,followups:0,reported:false};});
+    curRows.forEach(function(r){if(!activity[r.user_id])activity[r.user_id]={calls:0,followups:0,reported:false};activity[r.user_id].calls+=Number(r.calls_made)||0;activity[r.user_id].followups+=Number(r.follow_up_calls)||0;activity[r.user_id].reported=true;});
+    var ids=Object.keys(activity).sort(function(a,b){return activity[b].calls-activity[a].calls;});
+    if(!ids.length){empty("c11","No active team members found.");return;}
+    mk("c11",{type:"bar",data:{labels:ids.map(function(id){return names[id]||"Team member";}),datasets:[{label:"Calls made",data:ids.map(function(id){return activity[id].calls;}),backgroundColor:ids.map(function(id){return activity[id].calls?"#012547":"#E5322D";}),borderRadius:5},{label:"Follow-up calls",data:ids.map(function(id){return activity[id].followups;}),backgroundColor:ids.map(function(id){return activity[id].followups?"#7BD441":"#F2A0A0";}),borderRadius:5}]},options:opts({indexAxis:"y",scales:{x:{beginAtZero:true,grid:GRID,ticks:{precision:0}},y:{grid:{display:false}}},plugins:{legend:{position:"top",align:"end"}}})},"Red bars identify zero calls or zero follow-ups. Members without a report are shown as zero until they submit; check the report status before drawing conclusions.");
   }
 
   /* ---------- Alerts & Warnings ---------- */
