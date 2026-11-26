@@ -8,13 +8,14 @@
 <link rel="canonical" href="https://www.calvora.com.ng/agent.html">
 <meta property="og:title" content="Agent partner portal | Calvora Property Solutions">
 <meta property="og:description" content="Join Calvora as an agent partner, or sign in to your agent dashboard.">
-<meta property="og:image" content="https://www.calvora.com.ng/img/og.png">
+<meta property="og:image" content="https://www.calvora.com.ng/og.png">
 <meta name="theme-color" content="#012547">
-<link rel="icon" href="img/favicon.png">
-<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="icon" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/calvora.css">
+<link rel="stylesheet" href="calvora.css">
+<link rel="stylesheet" href="admin-insights.css?v=37">
 </head>
 <body>
 <div id="hd"></div>
@@ -40,12 +41,12 @@
 </div></div>
 </main>
 <div id="ft"></div>
-<script src="js/config.js"></script>
-<script src="js/core.js"></script>
+<script src="config.js"></script>
+<script src="core.js"></script>
 <script>CV.mount("");</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<script src="js/portal.js"></script>
-<script src="js/agent-portal.js"></script>
+<script src="portal.js"></script>
+<script src="agent-portal.js?v=37"></script>
 <script>document.getElementById("tiers").innerHTML = ["Bronze","Silver","Gold","Diamond"].map(function(n){var b=CV.BADGES[n];return '<div class="tier">'+CV.badge(n,72)+"<h3>"+n+'</h3><div class="m">'+CV.esc(b.meaning)+"</div><p>"+CV.esc(b.need)+"</p></div>";}).join("");</script>
 </body>
 </html>
