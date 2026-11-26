@@ -309,25 +309,97 @@
       '<div class="ar-visual"><div><div class="ar-donut" style="--mix:'+leadMix+'"><div><b>'+leadTotal+'</b><small>Social leads</small></div></div></div><div class="ar-bars"><h4>Social leads by channel</h4>'+SOCIAL.map(function(x,i){var v=socialLeads[i];return '<div class="ar-metric"><div><span>'+x[1]+'</span><b class="'+(v?'':'gap-red')+'">'+v+'</b></div><i><u style="width:'+(leadTotal?v/leadTotal*100:0)+'%;background:'+(v?'#7BD441':'#E5322D')+'"></u></i></div>';}).join('')+'</div></div>'+
       '<div class="ar-notes"><b>Challenges and support required</b><p>'+esc(r.problems||'No challenges reported.')+'</p></div><footer><span>Submitted '+(r.submitted_at?PT.dt(r.submitted_at):'')+'</span><span>CONFIDENTIAL · INTERNAL USE</span></footer></article>';
   }
+  /* ---------- Charts for the team report: line (trend) and donuts (mix) ---------- */
+  var RC = {};
+  function killRC() { Object.keys(RC).forEach(function (k) { try { RC[k].destroy(); } catch (e) {} }); RC = {}; }
+  function isoDay(d) { return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
+  function chartsReady() {
+    if (typeof Chart === "undefined") return false;
+    if (!Chart.__cvInit) { Chart.defaults.font.family = "Figtree, system-ui, sans-serif"; Chart.defaults.color = "#566577"; Chart.__cvInit = true; }
+    return true;
+  }
+  var centerPlugin = { id: "cvCenter", afterDraw: function (c, a, o) {
+    if (!o || o.text == null) return; var m = c.getDatasetMeta(0).data[0]; if (!m) return; var ctx = c.ctx;
+    ctx.save(); ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillStyle = "#012547"; ctx.font = "800 30px 'Bricolage Grotesque', system-ui, sans-serif"; ctx.fillText(o.text, m.x, m.y - 8);
+    ctx.fillStyle = "#68798a"; ctx.font = "600 12px Figtree, system-ui, sans-serif"; ctx.fillText(o.sub || "", m.x, m.y + 17); ctx.restore();
+  } };
+  function legendHtml(labels, values, colors) {
+    var t = values.reduce(function (n, v) { return n + v; }, 0);
+    return '<ul class="rc-leg">' + labels.map(function (l, i) { return '<li><i style="background:' + colors[i] + '"></i><span>' + l + '</span><b>' + values[i] + '</b><em>' + (t ? Math.round(values[i] / t * 100) : 0) + '%</em></li>'; }).join("") + "</ul>";
+  }
+  function drawDonut(id, labels, values, colors, sub) {
+    var el = document.getElementById(id); if (!el) return;
+    var total = values.reduce(function (n, v) { return n + v; }, 0);
+    RC[id] = new Chart(el, { type: "doughnut", plugins: [centerPlugin],
+      data: { labels: total ? labels : ["No activity recorded"], datasets: [{ data: total ? values : [1], backgroundColor: total ? colors : ["#E3E9EF"], borderColor: "#ffffff", borderWidth: 3, hoverOffset: total ? 6 : 0 }] },
+      options: { cutout: "72%", responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { enabled: !!total }, cvCenter: { text: String(total), sub: sub } } } });
+  }
+  function drawLine(id, labels, series) {
+    var el = document.getElementById(id); if (!el) return;
+    RC[id] = new Chart(el, { type: "line",
+      data: { labels: labels, datasets: series.map(function (s, i) { return {
+        label: s.label, data: s.data, borderColor: s.color, borderWidth: 3, tension: 0.35, pointRadius: 4, pointHoverRadius: 6,
+        pointBackgroundColor: "#ffffff", pointBorderColor: s.color, pointBorderWidth: 2, fill: i === 0,
+        backgroundColor: function (c) { var a = c.chart.chartArea; if (!a) return "rgba(1,37,71,.08)"; var g = c.chart.ctx.createLinearGradient(0, a.top, 0, a.bottom); g.addColorStop(0, "rgba(1,37,71,.18)"); g.addColorStop(1, "rgba(1,37,71,0)"); return g; }
+      }; }) },
+      options: { responsive: true, maintainAspectRatio: false, interaction: { mode: "index", intersect: false },
+        plugins: { legend: { position: "top", align: "start", labels: { usePointStyle: true, pointStyle: "circle", boxWidth: 8, boxHeight: 8, padding: 18, font: { weight: "600" } } },
+          tooltip: { backgroundColor: "#012547", padding: 12, cornerRadius: 10, titleFont: { weight: "700" }, usePointStyle: true } },
+        scales: { x: { grid: { display: false }, border: { display: false } },
+          y: { beginAtZero: true, suggestedMax: 5, ticks: { precision: 0 }, grid: { color: "#eaf0f5" }, border: { display: false } } } } });
+  }
+  function printWith(cls) {
+    var imgs = [];
+    $$(".rc-cv canvas").forEach(function (c) { try { var im = new Image(); im.className = "rc-pimg"; im.alt = ""; im.src = c.toDataURL("image/png"); c.parentNode.appendChild(im); imgs.push(im); } catch (e) {} });
+    document.body.classList.add(cls);
+    setTimeout(function () { window.print(); setTimeout(function () { document.body.classList.remove(cls); imgs.forEach(function (im) { im.remove(); }); }, 500); }, 150);
+  }
+
   async function reports() {
     var wk = (reports.wk = reports.wk || PT.monday());
-    var prevDate=new Date(wk+'T12:00:00');prevDate.setDate(prevDate.getDate()-7);var prevWeek=prevDate.getFullYear()+'-'+String(prevDate.getMonth()+1).padStart(2,'0')+'-'+String(prevDate.getDate()).padStart(2,'0');
-    var result=await Promise.all([sb.from('team_weekly_reports').select('*').eq('week_start',wk).order('submitted_at',{ascending:false}),sb.from('team_weekly_reports').select('*').eq('week_start',prevWeek)]);
-    if(result[0].error)throw result[0].error;if(result[1].error)throw result[1].error;var rows=result[0].data||[],prevRows=result[1].data||[];
-    var people = must(await sb.from('profiles').select('id,full_name,agent_code,staff_code,role,staff_role,status').in('role',['agent','staff']).eq('status','active'));
-    var map={};people.forEach(function(p){map[p.id]=p;});
-    var missing=people.filter(function(p){return !rows.some(function(r){return r.user_id===p.id;});});
-    var totals={};WF.forEach(function(f){totals[f[0]]=rows.reduce(function(n,r){return n+(Number(r[f[0]])||0);},0);});
-    var socialTotals={};SOCIAL.forEach(function(x){socialTotals[x[0]]={views:0,likes:0,leads:0};rows.forEach(function(r){var v=(r.social_metrics||{})[x[0]]||{};['views','likes','leads'].forEach(function(k){socialTotals[x[0]][k]+=Number(v[k])||0;});});});
-    setPane('<div class="report-heading"><div><p class="eyebrow">PEOPLE · WEEKLY ACCOUNTABILITY</p><h2>Team performance reports</h2><p class="muted">Calls, follow-ups, customer outcomes and social-media results for every active agent and staff member.</p></div><button class="btn" id="print-all-agents" type="button">Print all reports</button></div><div class="panel report-filter"><label for="wk" style="margin-top:0">Reporting week (Monday)</label><input id="wk" type="date" value="'+wk+'" style="max-width:220px"><span>'+rows.length+' submitted · '+missing.length+' outstanding</span></div>'+
-      '<div class="report-kpis"><div><b>'+rows.length+'/'+people.length+'</b><span>Reports received</span></div><div><b>'+totals.calls_made+'</b><span>Calls made</span></div><div><b>'+totals.follow_up_calls+'</b><span>Follow-up calls</span></div><div><b>'+totals.new_leads+'</b><span>New leads</span></div><div><b>'+totals.viewings_attended+'</b><span>Viewings attended</span></div><div><b>'+totals.conversions+'</b><span>Conversions</span></div></div>'+
-      '<section class="panel"><h3>Social media totals · selected week</h3><div class="scroll"><table class="tbl"><thead><tr><th>Channel</th><th>Views / reach</th><th>Likes / reactions</th><th>Leads</th></tr></thead><tbody>'+SOCIAL.map(function(x){var v=socialTotals[x[0]];return '<tr><td><b>'+x[1]+'</b></td><td>'+v.views.toLocaleString('en-NG')+'</td><td>'+v.likes.toLocaleString('en-NG')+'</td><td>'+v.leads+'</td></tr>';}).join('')+'</tbody></table></div></section>'+
-      people.length?people.map(function(person){var report=rows.find(function(r){return r.user_id===person.id;})||{user_id:person.id,week_start:wk,problems:'No weekly report submitted',social_metrics:{},calls_made:0,follow_up_calls:0,answered_calls:0,prospects_contacted:0,meetings_booked:0,viewings_attended:0,new_leads:0,qualified_leads:0,conversions:0,new_properties_sourced:0,owner_contacts:0,listings_submitted:0,transactions_completed:0};return teamReportCard(report,person,prevRows.find(function(p){return p.user_id===person.id;}));}).join(''):empty('No active agents or staff found.')+
-      (missing.length?'<div class="panel outstanding"><h3>Reports outstanding</h3><p>'+missing.map(function(a){return esc(a.full_name)+' ('+esc(a.agent_code||a.staff_code||'')+')';}).join(' · ')+'</p></div>':'')+
+    var prevDate = new Date(wk + "T12:00:00"); prevDate.setDate(prevDate.getDate() - 7); var prevWeek = isoDay(prevDate);
+    var result = await Promise.all([sb.from("team_weekly_reports").select("*").eq("week_start", wk).order("submitted_at", { ascending: false }), sb.from("team_weekly_reports").select("*").eq("week_start", prevWeek)]);
+    if (result[0].error) throw result[0].error; if (result[1].error) throw result[1].error;
+    var rows = result[0].data || [], prevRows = result[1].data || [];
+    var people = must(await sb.from("profiles").select("id,full_name,agent_code,staff_code,role,staff_role,status").in("role", ["agent", "staff"]).eq("status", "active"));
+    var missing = people.filter(function (p) { return !rows.some(function (r) { return r.user_id === p.id; }); });
+    var totals = {}; WF.forEach(function (f) { totals[f[0]] = rows.reduce(function (n, r) { return n + (Number(r[f[0]]) || 0); }, 0); });
+    var socialTotals = {}; SOCIAL.forEach(function (x) { socialTotals[x[0]] = { views: 0, likes: 0, leads: 0 }; rows.forEach(function (r) { var v = (r.social_metrics || {})[x[0]] || {}; ["views", "likes", "leads"].forEach(function (k) { socialTotals[x[0]][k] += Number(v[k]) || 0; }); }); });
+
+    /* 8-week trend (a failure here never blanks the page) */
+    var weeks = []; for (var i = 7; i >= 0; i--) { var d = new Date(wk + "T12:00:00"); d.setDate(d.getDate() - 7 * i); weeks.push(isoDay(d)); }
+    var trend = []; try { var tr = await sb.from("team_weekly_reports").select("week_start,calls_made,follow_up_calls,new_leads,conversions").gte("week_start", weeks[0]).lte("week_start", wk); trend = tr.data || []; } catch (e) { trend = []; }
+    var TS = [["calls_made", "Calls made", "#012547"], ["follow_up_calls", "Follow-up calls", "#2D86D6"], ["new_leads", "New leads", "#7BD441"], ["conversions", "Conversions", "#E5322D"]];
+    var lineSeries = TS.map(function (s) { return { label: s[1], color: s[2], data: weeks.map(function (w) { return trend.filter(function (r) { return r.week_start === w; }).reduce(function (n, r) { return n + (Number(r[s[0]]) || 0); }, 0); }) }; });
+    var weekLabels = weeks.map(function (w) { return new Date(w + "T12:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "short" }); });
+    var MIX = [["calls_made", "Calls made", "#012547"], ["follow_up_calls", "Follow-up calls", "#2D86D6"], ["meetings_booked", "Meetings booked", "#3FC9A0"], ["viewings_attended", "Viewings", "#8E5BC0"], ["new_leads", "New leads", "#7BD441"], ["conversions", "Conversions", "#E5322D"]];
+    var mixL = MIX.map(function (m) { return m[1]; }), mixV = MIX.map(function (m) { return totals[m[0]] || 0; }), mixC = MIX.map(function (m) { return m[2]; });
+    var SC = ["#012547", "#2D86D6", "#7BD441", "#3FC9A0", "#8E5BC0"];
+    var socL = SOCIAL.map(function (x) { return x[1]; }), socV = SOCIAL.map(function (x) { return socialTotals[x[0]].leads; });
+
+    var cards = people.length ? people.map(function (person) {
+      var report = rows.find(function (r) { return r.user_id === person.id; }) || { user_id: person.id, week_start: wk, problems: "No weekly report submitted", social_metrics: {}, calls_made: 0, follow_up_calls: 0, answered_calls: 0, prospects_contacted: 0, meetings_booked: 0, viewings_attended: 0, new_leads: 0, qualified_leads: 0, conversions: 0, new_properties_sourced: 0, owner_contacts: 0, listings_submitted: 0, transactions_completed: 0 };
+      return teamReportCard(report, person, prevRows.find(function (p) { return p.user_id === person.id; }));
+    }).join("") : empty("No active agents or staff found.");
+
+    killRC();
+    setPane('<div class="report-heading"><div><p class="eyebrow">PEOPLE · WEEKLY ACCOUNTABILITY</p><h2>Team performance reports</h2><p class="muted">Calls, follow-ups, customer outcomes and social-media results for every active agent and staff member.</p></div><button class="btn" id="print-all-agents" type="button">Print / Save PDF</button></div>' +
+      '<div class="panel report-filter"><label for="wk" style="margin-top:0">Reporting week (Monday)</label><input id="wk" type="date" value="' + wk + '" style="max-width:220px"><span>' + rows.length + ' submitted · ' + missing.length + ' outstanding</span></div>' +
+      '<div class="report-kpis"><div><b>' + rows.length + "/" + people.length + '</b><span>Reports received</span></div><div><b>' + totals.calls_made + '</b><span>Calls made</span></div><div><b>' + totals.follow_up_calls + '</b><span>Follow-up calls</span></div><div><b>' + totals.new_leads + '</b><span>New leads</span></div><div><b>' + totals.viewings_attended + '</b><span>Viewings attended</span></div><div><b>' + totals.conversions + '</b><span>Conversions</span></div></div>' +
+      '<div class="rc-wrap"><section class="panel rc-card"><div class="rc-hd"><p class="eyebrow">TREND · LAST 8 WEEKS</p><h3>Team activity over time</h3></div><div class="rc-cv rc-line"><canvas id="rc-line"></canvas></div></section>' +
+      '<section class="panel rc-card"><div class="rc-hd"><p class="eyebrow">SELECTED WEEK</p><h3>Activity mix</h3></div><div class="rc-cv rc-dn"><canvas id="rc-mix"></canvas></div>' + legendHtml(mixL, mixV, mixC) + "</section></div>" +
+      '<section class="panel rc-social"><div class="rc-hd"><p class="eyebrow">SOCIAL MEDIA</p><h3>Social media totals · selected week</h3></div><div class="rc-social-grid"><div><div class="rc-cv rc-dn"><canvas id="rc-soc"></canvas></div>' + legendHtml(socL, socV, SC) + '</div><div class="scroll"><table class="tbl"><thead><tr><th>Channel</th><th>Views / reach</th><th>Likes / reactions</th><th>Leads</th></tr></thead><tbody>' + SOCIAL.map(function (x) { var v = socialTotals[x[0]]; return "<tr><td><b>" + x[1] + "</b></td><td>" + v.views.toLocaleString("en-NG") + "</td><td>" + v.likes.toLocaleString("en-NG") + "</td><td>" + v.leads + "</td></tr>"; }).join("") + "</tbody></table></div></div></section>" +
+      cards +
+      (missing.length ? '<div class="panel outstanding"><h3>Reports outstanding</h3><p>' + missing.map(function (a) { return esc(a.full_name) + " (" + esc(a.agent_code || a.staff_code || "") + ")"; }).join(" · ") + "</p></div>" : "") +
       '<p class="fine">Social figures are self-reported from platform analytics. Calls and outcomes are also self-reported until checked against CRM records. A zero or missing report is a follow-up prompt, not proof that work was not done.</p>');
-    $('#wk').onchange=function(){reports.wk=PT.monday(this.value+'T12:00:00');go('reports');};
-    $('#print-all-agents').onclick=function(){document.body.classList.add('print-agent-reports');window.print();setTimeout(function(){document.body.classList.remove('print-agent-reports');},500);};
-    $$('[data-print-agent]').forEach(function(b){b.onclick=function(){document.body.classList.add('print-agent-one');var card=b.closest('[data-agent-report]');card.classList.add('print-selected');window.print();setTimeout(function(){document.body.classList.remove('print-agent-one');card.classList.remove('print-selected');},500);};});
+
+    if (chartsReady()) { drawLine("rc-line", weekLabels, lineSeries); drawDonut("rc-mix", mixL, mixV, mixC, "activities"); drawDonut("rc-soc", socL, socV, SC, "social leads"); }
+    else $$(".rc-cv").forEach(function (b) { b.innerHTML = '<div class="state">The chart library could not load. Check your internet connection and refresh.</div>'; });
+
+    $("#wk").onchange = function () { reports.wk = PT.monday(this.value + "T12:00:00"); go("reports"); };
+    $("#print-all-agents").onclick = function () { printWith("print-summary"); };
+    $$("[data-print-agent]").forEach(function (b) { b.onclick = function () { document.body.classList.add("print-agent-one"); var card = b.closest("[data-agent-report]"); card.classList.add("print-selected"); window.print(); setTimeout(function () { document.body.classList.remove("print-agent-one"); card.classList.remove("print-selected"); }, 500); }; });
   }
   async function myreport() {
     var wk=PT.monday(), row=must(await sb.from('team_weekly_reports').select('*').eq('user_id',user.id).eq('week_start',wk).maybeSingle())||{}, sm=row.social_metrics||{};
@@ -384,6 +456,7 @@
       if (r.error) box.innerHTML = fail(r.error); else { CV.toast("Access updated"); staff(); }
     };
   }
+
   /* ---------- audit log ---------- */
   async function audit() {
     var rows = must(await sb.from("audit_log").select("*").order("id", { ascending: false }).limit(150)), m = await names(rows.map(function (r) { return r.actor_id; }));
