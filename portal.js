@@ -143,7 +143,7 @@
     var cat = isAgent ? "Registered Agent" : p.role === "admin" ? "Management" : p.staff_role === "operations" ? "Staff · Operations" : p.staff_role === "marketing" ? "Staff · Marketing" : "Staff";
     var av = p.photo_url ? '<img class="av" src="' + esc(p.photo_url) + '" alt="Photo of ' + esc(p.full_name) + '" crossorigin="anonymous">' : '<span class="av av-i" aria-hidden="true">' + esc(CV.initials(p.full_name)) + "</span>";
     var url = location.origin + location.pathname.replace(/[^/]*$/, "") + "verify.html?id=" + encodeURIComponent(code);
-    return '<div class="idcard" id="idcard"><div class="top"><img src="img/logo.png" alt="Calvora Property Solutions"></div>' +
+    return '<div class="idcard" id="idcard"><div class="top"><img src="logo.png" alt="Calvora Property Solutions"></div>' +
       '<div class="mid">' + av + '<div><b style="font-size:1.15rem;color:var(--navy)">' + esc(p.full_name) + '</b><div class="muted small">' + esc(cat) + '</div><div style="font-weight:800;color:var(--navy);margin-top:4px">' + esc(code) + "</div>" +
       (isAgent && opt.badge ? '<div style="margin-top:6px">' + CV.badgeChip(opt.badge, 20) + "</div>" : "") + "</div></div>" +
       '<div class="bt"><div class="small"><div class="muted">Valid until</div><b>' + (p.id_expires_at ? CV.date(p.id_expires_at) : "Not set") + '</b><div class="muted" style="margin-top:6px">Scan to verify or visit<br><b>' + esc(S.domain || "") + "/verify</b></div></div>" +
