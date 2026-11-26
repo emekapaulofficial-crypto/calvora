@@ -188,7 +188,7 @@ input[type=checkbox],input[type=radio]{width:auto;margin-right:8px}
 .idcard .mid .av{width:84px;height:84px;border-radius:14px}
 .idcard .bt{padding:0 16px 16px;display:flex;justify-content:space-between;align-items:end;gap:10px}
 .idcard .qr{background:var(--white);padding:4px;border:1px solid var(--line);border-radius:8px}
-@media print{body *{visibility:hidden}.idcard,.idcard *{visibility:visible}.idcard{position:absolute;left:20px;top:20px}}
+@media print{body.print-idcard *{visibility:hidden}body.print-idcard .idcard,body.print-idcard .idcard *{visibility:visible}body.print-idcard .idcard{position:absolute;left:20px;top:20px}}
 
 /* portal + admin */
 .portal{display:grid;grid-template-columns:230px minmax(0,1fr);gap:26px;padding:26px 0 0;align-items:start}
